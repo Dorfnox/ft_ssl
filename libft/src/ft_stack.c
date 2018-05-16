@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-t_stack		*initS(void)
+t_stack		*inits(void)
 {
 	t_stack	*new;
 
@@ -50,12 +50,12 @@ void		*pop(t_stack *s)
 	return (content);
 }
 
-void		*peekS(t_stack *s)
+void		*peeks(t_stack *s)
 {
 	return (s->top ? s->top->content : NULL);
 }
 
-int			isEmptyS(t_stack *s)
+int			isemptys(t_stack *s)
 {
 	return (s->top ? 0 : 1);
 }

@@ -14,7 +14,9 @@ NAME = ft_ssl
 
 FILES = main \
 		error \
-		execute execute_md5 execute_sha256
+		execute \
+		execute_md5 init_md5 \
+		execute_sha256
 
 C_FLAGS = -Wall -Wextra -Werror
 

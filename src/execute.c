@@ -37,50 +37,56 @@ void				execute_from_input_files(t_ssl *ssl)
 	i = -1;
 	while (ssl->input_files[++i])
 	{
-		input = getfilecontents(ssl->input_files[i]);
+		ssl->filename = ssl->input_files[i];
+		ssl->input_len = getfilecontents(ssl->filename, &input);
 		if (!input)
 		{
 			write(1, NO_SUCH_FD_ERROR, ft_strlen(NO_SUCH_FD_ERROR));
 			continue ;
 		}
-		ssl->filename = ssl->input_files[i];
-		execute_general(ssl, input);
+		execute_general(ssl, &input);
 	}
 }
 
 /*
 **	Reads from the standard input, and calls the crypto algorithm
-**	on the input
+**	on the input.
+**
 */
 
 void				execute_from_stdin(t_ssl *ssl)
 {
 	char	*input;
-	char	*buffer;
+	char	*buffer[256];
 	int		i;
 
-	buffer = ft_str256(0);
 	input = ft_strnew(0);
 	while ((i = read(0, buffer, 255)))
 	{
+		if (i == -1)
+			if (ssl_error("read error", "failed to read from stdin", 1))
+				return ;
 		buffer[i] = 0;
-		input = ft_strfjoin(&input, buffer);
+		if (!(input = ft_strfjoin(&input, (char *)buffer)))
+			if (ssl_error("ft_strfjoin error", "execute_from_stdin fail", 1))
+				return ;
+		ssl->input_len += i;
 	}
-	execute_general(ssl, input);
+	execute_general(ssl, &input);
 }
 
 /*
 **	A General Function that helps with executing the input
 */
 
-void				execute_general(t_ssl *ssl, char *input)
+void				execute_general(t_ssl *ssl, char **input)
 {
 	char	*output;
 
-	DB(input); // delete
+	DB(*input); // delete
 	output = ssl->execute_func(ssl, input);
 	display_output(ssl, output);
-	free(input);
+	ft_strdel(input);
 }
 
 /*

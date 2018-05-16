@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-char				*execute_sha256(t_ssl *ssl, char *input)
+char				*execute_sha256(t_ssl *ssl, char **input)
 {
 	(void)ssl;
 	(void)input;

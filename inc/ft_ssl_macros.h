@@ -27,4 +27,13 @@
 # define NO_SUCH_FD_ERROR ft_str128(2, ssl->input_files[i], \
 		": no such file or directory\n")
 
+/*
+**	MD5 Auxiliary Functions
+*/
+
+# define MD5_AUX_F1(x, y, z) ((x & y) | (~(x) & z))
+# define MD5_AUX_F2(x, y, z) ((x & z) | (y & ~(z)))
+# define MD5_AUX_F3(x, y, z) (x ^ y ^ z)
+# define MD5_AUX_F4(x, y, z) (y ^ (x | ~(z)))
+
 #endif

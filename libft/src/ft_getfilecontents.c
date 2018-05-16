@@ -6,37 +6,40 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 20:15:18 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/15 20:32:14 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/16 15:00:39 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*free_fc(int fd, char *fc)
+static size_t	free_fc(int fd, char **fc)
 {
 	close(fd);
-	free(fc);
-	return (NULL);
+	free(*fc);
+	*fc = NULL;
+	return (0);
 }
 
-char		*getfilecontents(char *filename)
+size_t			getfilecontents(char *filename, char **contents)
 {
-	char	*filecontents;
 	char	buff[1024];
 	int		fd;
 	int		ret;
+	size_t	total;
 
-	if ((fd = open(filename, O_RDONLY)) == -1)
-		return (NULL);
-	filecontents = ft_strnew(0);
+	if (!filename || !contents || (fd = open(filename, O_RDONLY)) == -1)
+		return (0);
+	*contents = ft_strnew(0);
+	total = 0;
 	while ((ret = read(fd, buff, 1023)))
 	{
 		if (ret == -1)
-			return (free_fc(fd, filecontents));
+			return (free_fc(fd, contents));
 		buff[ret] = 0;
-		if (!(filecontents = ft_strfjoin(&filecontents, buff)))
-			return (free_fc(fd, filecontents));
+		if (!(*contents = ft_strfjoin(contents, buff)))
+			return (free_fc(fd, contents));
+		total += ret;
 	}
 	close(fd);
-	return (filecontents);
+	return (total);
 }

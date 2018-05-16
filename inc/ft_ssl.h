@@ -40,9 +40,9 @@ typedef struct			s_ft_ssl
 	char				*flag_error;
 	char				**input_files;
 	char				*filename;
+	size_t				input_len;
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
-	char				*(*execute_func)(struct s_ft_ssl *, char *);
-	void				*enc_struct;
+	char				*(*execute_func)(struct s_ft_ssl *, char **);
 }						t_ssl;
 
 typedef struct			s_md5
@@ -51,6 +51,8 @@ typedef struct			s_md5
 	uint32_t			b;
 	uint32_t			c;
 	uint32_t			d;
+	uint32_t			k[64];
+	uint32_t			s[64];
 }						t_md5;
 
 /*
@@ -80,10 +82,27 @@ unsigned int			handle_sha256_flags(t_ssl *ssl, char **av);
 void					execute_all(t_ssl *ssl);
 void					execute_from_input_files(t_ssl *ssl);
 void					execute_from_stdin(t_ssl *ssl);
-void					execute_general(t_ssl *ssl, char *input);
+void					execute_general(t_ssl *ssl, char **input);
 void					display_output(t_ssl *ssl, char *output);
 
-char					*execute_md5(t_ssl *ssl, char *input);
-char					*execute_sha256(t_ssl *ssl, char *output);
+/*
+**	MD5
+*/
+
+char					*execute_md5(t_ssl *ssl, char **input);
+
+void					init_md5(t_md5 *md5);
+void					init_md5_s_table(t_md5 *md5);
+void					init_md5_k_table1(t_md5 *md5);
+void					init_md5_k_table2(t_md5 *md5);
+void					init_md5_k_table3(t_md5 *md5);
+
+void					append_bits_to_input(char **input);
+
+/*
+**	SHA-256
+*/
+
+char					*execute_sha256(t_ssl *ssl, char **output);
 
 #endif

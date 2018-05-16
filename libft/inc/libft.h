@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/15 20:31:28 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/16 14:57:54 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,18 +201,18 @@ char				*ft_str128(int num, ...);
 char				*ft_str256(int num, ...);
 char				*ft_str1024(int num, ...);
 
-t_queue				*initQ(void);
+t_queue				*initq(void);
 void				enqueue(t_queue *q, void *content);
 void				*dequeue(t_queue *q);
-void				*peekQ(t_queue *q);
-int					isEmptyQ(t_queue *q);
+void				*peekq(t_queue *q);
+int					isemptyq(t_queue *q);
 
-t_stack				*initS(void);
+t_stack				*inits(void);
 void				push(t_stack *s, void *content);
 void				*pop(t_stack *s);
-void				*peekS(t_stack *s);
-int					isEmptyS(t_stack *s);
+void				*peeks(t_stack *s);
+int					isemptys(t_stack *s);
 
-char				*getfilecontents(char *filename);
+size_t				getfilecontents(char *filename, char **contents);
 
 #endif

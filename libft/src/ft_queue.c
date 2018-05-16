@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-t_queue		*initQ(void)
+t_queue		*initq(void)
 {
 	t_queue	*q;
 
@@ -56,12 +56,12 @@ void		*dequeue(t_queue *q)
 	return (content);
 }
 
-void		*peekQ(t_queue *q)
+void		*peekq(t_queue *q)
 {
 	return (q->first ? q->first->content : NULL);
 }
 
-int			isEmptyQ(t_queue *q)
+int			isemptyq(t_queue *q)
 {
 	return (q->first ? 0 : 1);
 }
