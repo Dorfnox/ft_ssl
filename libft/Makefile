@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/14 19:30:50 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/15 20:31:56 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,9 @@ FILES = bzero memalloc memccpy memchr memcmp memcpy memdel memmove memset \
 		sandwichjoin sandwichfjoin sandwichffjoin trim strsplice strfnew \
 		debug concat_params strremovequotes strfremovequotes clearterminal \
 		strreplace cursor cursormore \
-		str256
+		str256 \
+		stack queue \
+		getfilecontents
 
 NUM_FILES = $(words $(FILES))
 

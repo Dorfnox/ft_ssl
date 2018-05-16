@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl_md5.h"
+#include "ft_ssl.h"
 
 int		main(int ac, char **av)
 {
@@ -27,7 +27,7 @@ int		main(int ac, char **av)
 	{
 		return (ssl_error(ssl.cmd_name_lower, FLAG_ERROR, 1));
 	}
-	ssl.execute_func(ssl);
+	execute_all(&ssl);
 	return (0);
 }
 
@@ -119,15 +119,4 @@ unsigned int		handle_sha256_flags(t_ssl *ssl, char **av)
 		++av;
 	}
 	return (1);
-}
-
-int					ssl_error(char *name, char *message, int ret_val)
-{
-	char	*err;
-
-	err = ft_str128(1, "ft_ssl: ");
-	err = ft_str128(3, err, name, name ? ": " : "");
-	err = ft_str128(2, err, message);
-	write(1, err, ft_strlen(err));
-	return (ret_val);
 }

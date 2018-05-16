@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/14 20:48:08 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/15 20:31:28 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,25 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+typedef struct		s_node
+{
+	void			*content;
+	struct s_node	*next;
+}					t_node;
+
+typedef struct		s_queue
+{
+	struct s_node	*first;
+	struct s_node	*last;
+	uint32_t		size;
+}					t_queue;
+
+typedef struct		s_stack
+{
+	struct s_node	*top;
+	uint32_t		size;
+}					t_stack;
 
 typedef	struct		s_list
 {
@@ -181,5 +200,19 @@ void				ft_cclearline(int num);
 char				*ft_str128(int num, ...);
 char				*ft_str256(int num, ...);
 char				*ft_str1024(int num, ...);
+
+t_queue				*initQ(void);
+void				enqueue(t_queue *q, void *content);
+void				*dequeue(t_queue *q);
+void				*peekQ(t_queue *q);
+int					isEmptyQ(t_queue *q);
+
+t_stack				*initS(void);
+void				push(t_stack *s, void *content);
+void				*pop(t_stack *s);
+void				*peekS(t_stack *s);
+int					isEmptyS(t_stack *s);
+
+char				*getfilecontents(char *filename);
 
 #endif

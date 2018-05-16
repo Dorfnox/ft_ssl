@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/14 18:53:04 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/14 20:47:34 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/15 18:50:15 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char	*ft_str256(int num, ...)
 	int			i;
 	va_list		ap;
 
+	if (num == 0)
+		return (s);
 	i = 0;
 	s[255] = 0;
 	va_start(ap, num);
@@ -33,13 +35,11 @@ char	*ft_str256(int num, ...)
 			while (i < 255 && *tmp)
 				s[i++] = *(tmp++);
 		if (tmp && *tmp)
-		{
-			s[251] = '.';
-			s[252] = '.';
-			s[253] = '.';
-			s[254] = '\n';
-			break ;
-		}
+			if ((s[251] = '.'))
+				if ((s[252] = '.'))
+					if ((s[253] = '.'))
+						if ((s[254] = '\n'))
+							break ;
 	}
 	s[i] = 0;
 	va_end(ap);
@@ -57,6 +57,8 @@ char	*ft_str1024(int num, ...)
 	int			i;
 	va_list		ap;
 
+	if (num == 0)
+		return (s);
 	i = 0;
 	s[1023] = 0;
 	va_start(ap, num);
@@ -66,13 +68,11 @@ char	*ft_str1024(int num, ...)
 			while (i < 1023 && *tmp)
 				s[i++] = *(tmp++);
 		if (tmp && *tmp)
-		{
-			s[1022] = '\n';
-			s[1021] = '.';
-			s[1020] = '.';
-			s[1019] = '.';
-			break ;
-		}
+			if ((s[1022] = '\n'))
+				if ((s[1021] = '.'))
+					if ((s[1020] = '.'))
+						if ((s[1019] = '.'))
+							break ;
 	}
 	s[i] = 0;
 	va_end(ap);
@@ -90,6 +90,8 @@ char	*ft_str128(int num, ...)
 	int			i;
 	va_list		ap;
 
+	if (num == 0)
+		return (s);
 	i = 0;
 	s[127] = 0;
 	va_start(ap, num);
@@ -99,13 +101,11 @@ char	*ft_str128(int num, ...)
 			while (i < 127 && *tmp)
 				s[i++] = *(tmp++);
 		if (tmp && *tmp)
-		{
-			s[126] = '\n';
-			s[125] = '.';
-			s[124] = '.';
-			s[123] = '.';
-			break ;
-		}
+			if ((s[126] = '\n'))
+				if ((s[125] = '.'))
+					if ((s[124] = '.'))
+						if ((s[123] = '.'))
+							break ;
 	}
 	s[i] = 0;
 	va_end(ap);

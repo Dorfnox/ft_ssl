@@ -24,4 +24,7 @@
 # define FLAG_ERROR ft_str256(6, "unknown option: '", ssl.flag_error, \
 		"'\nValid ", ssl.cmd_name_upper, " flags:\n", ssl.cmd_valid_flags)
 
+# define NO_SUCH_FD_ERROR ft_str128(2, ssl->input_files[i], \
+		": no such file or directory\n")
+
 #endif

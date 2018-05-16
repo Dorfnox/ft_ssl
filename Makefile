@@ -14,7 +14,7 @@ NAME = ft_ssl
 
 FILES = main \
 		error \
-		execute
+		execute execute_md5 execute_sha256
 
 C_FLAGS = -Wall -Wextra -Werror
 
@@ -31,7 +31,7 @@ LIB_NAM = libft.a
 LIB_SRC = $(addprefix $(LIB_LOC), $(LIB_NAM))
 
 H_LOCS = -I inc -I libft/inc
-HEADERS = inc/ft_ssl_md5.h inc/ft_ssl_macros.h
+HEADERS = inc/ft_ssl.h inc/ft_ssl_macros.h
 
 RED = [31m
 GREEN = [32m
