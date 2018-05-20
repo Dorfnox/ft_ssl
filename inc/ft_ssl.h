@@ -157,6 +157,12 @@ void					output_given_string(t_ssl *ssl, char *input, char *output);
 void					output_filename(t_ssl *ssl, char *input, char *output);
 
 /*
+**	Endian handling
+*/
+uint32_t				swap_endian32(uint32_t a);
+uint64_t				swap_endian64(uint64_t a);
+
+/*
 **	Crypto execution
 **	----------------------------------------------------------------------------
 */

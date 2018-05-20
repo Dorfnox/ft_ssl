@@ -19,6 +19,7 @@ FILES = main \
 		execute \
 		input \
 		output \
+		endian \
 		flags_md5 execute_md5 init_md5 \
 		flags_sha256 execute_sha256 init_sha256 \
 
