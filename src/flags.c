@@ -16,7 +16,7 @@
 **	Main command handler functions
 */
 
-unsigned int		handle_command(t_ssl *ssl, char **av)
+unsigned int	handle_command(t_ssl *ssl, char **av)
 {
 	int		success;
 
@@ -38,7 +38,7 @@ unsigned int		handle_command(t_ssl *ssl, char **av)
 	return (success);
 }
 
-void				init_command_settings(
+void			init_command_settings(
 					t_ssl *ssl, char *sn, char *ln, char *valid_flags)
 {
 	static char	command_lowercase[MAX_COMMAND_SIZE];
