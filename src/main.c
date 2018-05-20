@@ -29,7 +29,5 @@ int		main(int ac, char **av)
 	}
 	execute_all(&ssl);
 	clean_up(&ssl);
-	// while (1)
-	// 	;
 	return (0);
 }
