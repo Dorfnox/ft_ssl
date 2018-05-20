@@ -14,9 +14,13 @@ NAME = ft_ssl
 
 FILES = main \
 		error \
+		commands \
+		flags \
 		execute \
-		execute_md5 init_md5 \
-		execute_sha256
+		input \
+		output \
+		flags_md5 execute_md5 init_md5 \
+		flags_sha256 execute_sha256 init_sha256 \
 
 C_FLAGS = -Wall -Wextra -Werror
 
@@ -90,6 +94,6 @@ fclean: clean
 re: fclean all
 
 test:
-	@make && ./$(NAME)
+	@make && echo "yo" | ./$(NAME) md5
 
 .PHONY: all force clean fclean re

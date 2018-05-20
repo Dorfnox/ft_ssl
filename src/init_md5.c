@@ -45,7 +45,7 @@ void			init_md5_s_table(t_md5 *md5)
 	while (i < 32)
 		if ((md5->s[i++] = 5))
 			if ((md5->s[i++] = 9))
-				if ((md5->s[i++] = 15))
+				if ((md5->s[i++] = 14))
 					md5->s[i++] = 20;
 	while (i < 48)
 		if ((md5->s[i++] = 4))

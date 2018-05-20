@@ -13,90 +13,83 @@
 #include "ft_ssl.h"
 
 /*
-**	main function that handles whether to read from stdin, or from file
+**	main execute function
 */
 
 void				execute_all(t_ssl *ssl)
 {
+	char	*contents;
+
+	if ((!ssl->input_files && !ssl->given_strings && ssl->f.p == 0) ||
+		ssl->f.p == 1)
+	{
+		contents = input_from_stdin(ssl);
+		execute_general(ssl, contents, STDIN_OUTPUT);
+	}
+	if (ssl->given_strings)
+	{
+		execute_given_strings(ssl);
+	}
 	if (ssl->input_files)
-		execute_from_input_files(ssl);
-	else
-		execute_from_stdin(ssl);
+	{
+		execute_input_files(ssl);
+	}
 }
 
 /*
-**	A while loop iterates through each file, and calls the crypto algorithm
-**	on that file's contents
+**	Loops through given strings, and calls execute_general for each string
 */
 
-void				execute_from_input_files(t_ssl *ssl)
+void				execute_given_strings(t_ssl *ssl)
 {
-	char	*input;
+	char	*contents;
+	int		i;
+
+	i = -1;
+	while (ssl->given_strings[++i])
+	{
+		ssl->given_string = ssl->given_strings[i];
+		contents = input_from_given_string(ssl);
+		execute_general(ssl, contents, GIVEN_STRING_OUTPUT);
+	}
+}
+
+/*
+**	Loops through input files, and calls execute_general for each file content
+*/
+
+void				execute_input_files(t_ssl *ssl)
+{
+	char	*contents;
 	int		i;
 
 	i = -1;
 	while (ssl->input_files[++i])
 	{
 		ssl->filename = ssl->input_files[i];
-		ssl->input_len = getfilecontents(ssl->filename, &input);
-		if (!input)
-		{
-			write(1, NO_SUCH_FD_ERROR, ft_strlen(NO_SUCH_FD_ERROR));
-			continue ;
-		}
-		execute_general(ssl, &input);
+		contents = input_from_file(ssl);
+		execute_general(ssl, contents, FILENAME_OUTPUT);
 	}
 }
 
 /*
-**	Reads from the standard input, and calls the crypto algorithm
-**	on the input.
-**
+**	A general Function that helps with executing the crypto algorithms
 */
 
-void				execute_from_stdin(t_ssl *ssl)
-{
-	char	*input;
-	char	*buffer[256];
-	int		i;
-
-	input = ft_strnew(0);
-	while ((i = read(0, buffer, 255)))
-	{
-		if (i == -1)
-			if (ssl_error("read error", "failed to read from stdin", 1))
-				return ;
-		buffer[i] = 0;
-		if (!(input = ft_strfjoin(&input, (char *)buffer)))
-			if (ssl_error("ft_strfjoin error", "execute_from_stdin fail", 1))
-				return ;
-		ssl->input_len += i;
-	}
-	execute_general(ssl, &input);
-}
-
-/*
-**	A General Function that helps with executing the input
-*/
-
-void				execute_general(t_ssl *ssl, char **input)
+void				execute_general(t_ssl *ssl, char *input, int display_type)
 {
 	char	*output;
 
-	DB(*input); // delete
+	if (!input)
+		return ;
 	output = ssl->execute_func(ssl, input);
-	display_output(ssl, output);
-	ft_strdel(input);
-}
-
-/*
-**	Handles displaying the output to the terminal, or more in the future
-*/
-
-void				display_output(t_ssl *ssl, char *output)
-{
-	(void)ssl;
-	write(1, output, ft_strlen(output));
-	write(1, "\n", 1);
+	if (display_type == STDIN_OUTPUT)
+		output_stdin(ssl, input, output);
+	else if (display_type == GIVEN_STRING_OUTPUT)
+		output_given_string(ssl, input, output);
+	else if (display_type == FILENAME_OUTPUT)
+		output_filename(ssl, input, output);
+	free(input);
+	free(output);
 }
 

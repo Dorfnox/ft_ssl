@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp                                               :+:      :+:    :+:   */
+/*   flags.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/03/30 20:57:13 by bpierce          ###   ########.fr       */
+/*   Created: 2018/05/19 15:03:02 by bpierce           #+#    #+#             */
+/*   Updated: 2018/05/19 15:03:09 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-int		main(int ac, char **av)
+int					collect_given_parameter(char ***save, char *param)
 {
-	t_ssl	ssl;
+	char	**tmp;
+	int		i;
 
-	if (ac == 1)
-		return (ssl_error(NULL, USAGE, 1));
-	ft_bzero(&ssl, sizeof(t_ssl));
-	if (!(handle_command(&ssl, av + 1)))
+	if (!param)
+		return (0);
+	if ((tmp = *save))
 	{
-		return (ssl_error(NULL, COMMANDS, 1));
+		i = -1;
+		while (tmp[++i])
+			;
+		tmp = malloc(sizeof(char *) * (i + 2));
+		ft_memcpy(tmp, *save, sizeof(char *) * i);
+		tmp[i] = param;
+		tmp[i + 1] = NULL;
 	}
-	if (!(ssl.handle_flags(&ssl, av + 2)))
+	else
 	{
-		return (ssl_error(ssl.cmd_name_lower, ssl.flag_error, 1));
+		tmp = malloc(sizeof(char *) * 2);
+		tmp[0] = param;
+		tmp[1] = NULL;
 	}
-	execute_all(&ssl);
-	clean_up(&ssl);
-	// while (1)
-	// 	;
-	return (0);
+	free(*save);
+	*save = tmp;
+	return (1);
 }
