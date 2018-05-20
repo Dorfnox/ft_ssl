@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-int					ssl_error(char *name, char *message, int ret_val)
+int		ssl_error(char *name, char *message, int ret_val)
 {
 	char	*err;
 

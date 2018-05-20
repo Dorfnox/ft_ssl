@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "ft_ssl_macros.h"
 
-enum 					e_enc_type
+enum					e_enc_type
 {
 	MD5 = 1,
 	SHA_256
@@ -125,7 +125,7 @@ int						ssl_error(char *name, char *message, int ret_value);
 void					clean_up(t_ssl *ssl);
 
 /*
-**	Argument handling
+**	Argument / Flag handling
 **	----------------------------------------------------------------------------
 */
 
@@ -134,9 +134,11 @@ void					init_command_settings(
 						t_ssl *ssl, char *sn, char *ln, char *valid_flags);
 
 unsigned int			handle_md5_flags(t_ssl *ssl, char **av);
+unsigned int			handle_md5_regular_flags(t_ssl *ssl, char **av);
 unsigned int			handle_sha256_flags(t_ssl *ssl, char **av);
+unsigned int			handle_sha256_regular_flags(t_ssl *ssl, char **av);
 
-int						collect_given_parameter(char ***save, char *prm);
+unsigned int			collect_given_parameter(char ***save, char *param);
 
 /*
 **	Input handling
@@ -153,12 +155,14 @@ char					*input_from_given_string(t_ssl *ssl);
 */
 
 void					output_stdin(t_ssl *ssl, char *input, char *output);
-void					output_given_string(t_ssl *ssl, char *input, char *output);
+void					output_given_string(t_ssl *ssl, char *input, char *out);
 void					output_filename(t_ssl *ssl, char *input, char *output);
 
 /*
 **	Endian handling
+**	----------------------------------------------------------------------------
 */
+
 uint32_t				swap_endian32(uint32_t a);
 uint64_t				swap_endian64(uint64_t a);
 
@@ -202,7 +206,6 @@ void					init_words(t_sha256 *sha, size_t *k);
 void					init_working_variables(t_sha256 *sha);
 void					perform_algorithm(t_sha256 *sha);
 void					add_to_digest(t_sha256 *sha);
-
 
 void					append_bits_sha256(t_ssl *s, t_sha256 *sha, char *i);
 char					*build_sha256_output(t_sha256 *sha);

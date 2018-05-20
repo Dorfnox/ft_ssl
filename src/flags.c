@@ -12,12 +12,17 @@
 
 #include "ft_ssl.h"
 
-int					collect_given_parameter(char ***save, char *param)
+/*
+**	Stores the given parameter in the given ***array
+**	Will reallocate **save if things already exist in the deferenced array
+*/
+
+unsigned int	collect_given_parameter(char ***save, char *param)
 {
 	char	**tmp;
 	int		i;
 
-	if (!param)
+	if (!param || !save)
 		return (0);
 	if ((tmp = *save))
 	{

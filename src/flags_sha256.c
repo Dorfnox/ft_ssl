@@ -12,24 +12,20 @@
 
 #include "ft_ssl.h"
 
-unsigned int		handle_sha256_flags(t_ssl *ssl, char **av)
+unsigned int	handle_sha256_flags(t_ssl *ssl, char **av)
 {
 	while (*av)
 	{
-		if (SE_("-p", *av))
-			ssl->f.p = 1;
-		else if (SE_("-q", *av))
-			ssl->f.q = 1;
-		else if (SE_("-r", *av))
-			ssl->f.r = 1;
+		if (handle_sha256_regular_flags(ssl, av))
+			;
 		else if (SE_("-s", *av))
 		{
-			ssl->f.s = 1;
-			if (!collect_given_parameter(&ssl->given_strings, *(++av)))
-				return ((ssl->flag_error = FLAG_ERROR1) ? 0 : 0);
+			ssl->f.s = collect_given_parameter(&ssl->given_strings, *(++av));
+			if (!ssl->f.s)
+				return ((ssl->flag_error = FLAG_ERR1) ? 0 : 0);
 		}
 		else if (CE_('-', **av))
-			return ((ssl->flag_error = FLAG_ERROR2) ? 0 : 0);
+			return ((ssl->flag_error = FLAG_ERR2) ? 0 : 0);
 		else
 		{
 			ssl->input_files = av;
@@ -38,4 +34,15 @@ unsigned int		handle_sha256_flags(t_ssl *ssl, char **av)
 		++av;
 	}
 	return (1);
+}
+
+unsigned int	handle_sha256_regular_flags(t_ssl *ssl, char **av)
+{
+	if (SE_("-p", *av))
+		return ((ssl->f.p = 1));
+	else if (SE_("-q", *av))
+		return ((ssl->f.q = 1));
+	else if (SE_("-r", *av))
+		return ((ssl->f.r = 1));
+	return (0);
 }

@@ -92,4 +92,3 @@ void				execute_general(t_ssl *ssl, char *input, int display_type)
 	free(input);
 	free(output);
 }
-

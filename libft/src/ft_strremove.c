@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:38:35 by bpierce           #+#    #+#             */
-/*   Updated: 2018/04/03 17:05:42 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/20 15:58:06 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char		*ft_strremove(char *s, char *rem_chars)
 
 	if (!s)
 		return (NULL);
-	if (!rem_chars|| !rem_chars[0])
+	if (!rem_chars || !rem_chars[0])
 		return (s);
 	i = 0;
 	flag = 0;
@@ -58,7 +58,7 @@ char		*ft_strremovenobs(char *s, char *rem_chars)
 
 	if (!s)
 		return (NULL);
-	if (!rem_chars|| !rem_chars[0])
+	if (!rem_chars || !rem_chars[0])
 		return (s);
 	i = 0;
 	flag = 0;

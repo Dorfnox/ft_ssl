@@ -85,10 +85,14 @@ void	perform_algorithm(t_sha256 *sha)
 	j = -1;
 	while (++j < 64)
 	{
-		sha->tmpa = RIGHT_ROTATE(sha->e, 6) ^ RIGHT_ROTATE(sha->e, 11) ^ RIGHT_ROTATE(sha->e, 25);
+		sha->tmpa = RIGHT_ROTATE(sha->e, 6) ^
+					RIGHT_ROTATE(sha->e, 11) ^
+					RIGHT_ROTATE(sha->e, 25);
 		sha->tmpb = (sha->e & sha->f) ^ ((~sha->e) & sha->g);
 		sha->tmpc = sha->h + sha->tmpa + sha->tmpb + sha->k[j] + sha->w[j];
-		sha->tmpd = RIGHT_ROTATE(sha->a, 2) ^ RIGHT_ROTATE(sha->a, 13) ^ RIGHT_ROTATE(sha->a, 22);
+		sha->tmpd = RIGHT_ROTATE(sha->a, 2) ^
+					RIGHT_ROTATE(sha->a, 13) ^
+					RIGHT_ROTATE(sha->a, 22);
 		sha->tmpe = (sha->a & sha->b) ^ (sha->a & sha->c) ^ (sha->b & sha->c);
 		sha->tmpf = sha->tmpd + sha->tmpe;
 		sha->h = sha->g;

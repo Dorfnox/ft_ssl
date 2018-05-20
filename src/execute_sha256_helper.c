@@ -12,7 +12,6 @@
 
 #include "ft_ssl.h"
 
-
 void	append_bits_sha256(t_ssl *ssl, t_sha256 *sha, char *input)
 {
 	uint64_t	num_of_bits;
@@ -26,7 +25,8 @@ void	append_bits_sha256(t_ssl *ssl, t_sha256 *sha, char *input)
 	ft_memcpy(sha->data, input, ssl->input_len);
 	sha->data[ssl->input_len] = 128;
 	num_of_bits = swap_endian64(num_of_bits);
-	ft_memcpy(sha->data + ssl->input_len + (zero_bits / 8) + 1, &num_of_bits, 8);
+	ft_memcpy(sha->data + ssl->input_len + (zero_bits / 8) + 1,
+				&num_of_bits, 8);
 	ssl->input_len += (1 + (zero_bits / 8) + 8);
 }
 
@@ -46,7 +46,7 @@ char	*build_sha256_output(t_sha256 *sha)
 	while (i < 64)
 	{
 		u.v = i < 56 ? sha->h6 : sha->h7;
-		u.v = i < 48 ? sha->h5: u.v;
+		u.v = i < 48 ? sha->h5 : u.v;
 		u.v = i < 40 ? sha->h4 : u.v;
 		u.v = i < 32 ? sha->h3 : u.v;
 		u.v = i < 24 ? sha->h2 : u.v;

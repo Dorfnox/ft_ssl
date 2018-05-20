@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-void			init_sha256(t_sha256 *sha)
+void	init_sha256(t_sha256 *sha)
 {
 	sha->h0 = 0x6a09e667;
 	sha->h1 = 0xbb67ae85;
@@ -27,7 +27,7 @@ void			init_sha256(t_sha256 *sha)
 	init_sha256_k_table3(sha);
 }
 
-void			init_sha256_k_table1(t_sha256 *sha)
+void	init_sha256_k_table1(t_sha256 *sha)
 {
 	sha->k[0] = 0x428a2f98;
 	sha->k[1] = 0x71374491;
@@ -52,7 +52,8 @@ void			init_sha256_k_table1(t_sha256 *sha)
 	sha->k[20] = 0x2de92c6f;
 	sha->k[21] = 0x4a7484aa;
 }
-void			init_sha256_k_table2(t_sha256 *sha)
+
+void	init_sha256_k_table2(t_sha256 *sha)
 {
 	sha->k[22] = 0x5cb0a9dc;
 	sha->k[23] = 0x76f988da;
@@ -78,7 +79,7 @@ void			init_sha256_k_table2(t_sha256 *sha)
 	sha->k[43] = 0xc76c51a3;
 }
 
-void			init_sha256_k_table3(t_sha256 *sha)
+void	init_sha256_k_table3(t_sha256 *sha)
 {
 	sha->k[44] = 0xd192e819;
 	sha->k[45] = 0xd6990624;
@@ -101,5 +102,3 @@ void			init_sha256_k_table3(t_sha256 *sha)
 	sha->k[62] = 0xbef9a3f7;
 	sha->k[63] = 0xc67178f2;
 }
-
-

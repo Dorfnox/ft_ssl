@@ -15,7 +15,6 @@
 /*
 **	Reads from the standard input, and calls the crypto algorithm
 **	on the input.
-**
 */
 
 char				*input_from_stdin(t_ssl *ssl)
@@ -57,7 +56,9 @@ char				*input_from_file(t_ssl *ssl)
 	ssl->input_len = getfilecontents(ssl->filename, &input);
 	if (!input)
 	{
-		ft_pflite("%s: %s: %s: %s\n", "ft_ssl", ssl->cmd_name_lower, ssl->filename,
+		ft_pflite("%s: %s: %s: %s\n",
+			"ft_ssl",
+			ssl->cmd_name_lower, ssl->filename,
 			"no such file or directory");
 		return (NULL);
 	}

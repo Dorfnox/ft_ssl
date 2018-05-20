@@ -21,9 +21,16 @@
 
 # define VALID_MD5_FLAGS "-p\n-q\n-r\n-s\n"
 # define VALID_SHA256_FLAGS "-p\n-q\n-r\n-s\n"
-# define FLAG_ERROR1 ft_str256(2, *(av - 1), ": requires an argument\n")
-# define FLAG_ERROR2 ft_str256(6, "unknown option: '", *av, \
-		"'\nValid ", ssl->cmd_name_upper, " flags:\n", ssl->cmd_valid_flags)
+
+# define FLAG_ERR1 ft_str256(2, *(av - 1), ": requires an argument\n")
+
+# define FE_2A "unknown option: '"
+# define FE_2B *av
+# define FE_2C "'\nValid "
+# define FE_2D ssl->cmd_name_upper
+# define FE_2E " flags:\n"
+# define FE_2F ssl->cmd_valid_flags
+# define FLAG_ERR2 ft_str256(6, FE_2A, FE_2B, FE_2C, FE_2D, FE_2E, FE_2F)
 
 /*
 **	Super Helpful Functions
@@ -51,14 +58,5 @@
 # define TBE_4(a) ((((uint64_t)(a)[6]) << 8) | (((uint64_t) (a)[7]) << 0))
 # define TO_BIG_ENDIAN64(a) (TBE_1(a) | TBE_2(a) | TBE_3(a) | TBE_4(a))
 # define TBE(a) TO_BIG_ENDIAN64(a)
-
-/*
-**	Debugging Helper Functions
-**
-**	# define MD5_PRINT_ABCD ft_printf("a: %.32b\nb: %.32b\nc: %.32b\nd: %.32b\n", \
-**						md5.a, md5.b, md5.c, md5.d)
-**	# define MD5_PRINT_ABCD2 ft_printf("a: %.32b\nb: %.32b\nc: %.32b\nd: %.32b\n", \
-**						md5.a2, md5.b2, md5.c2, md5.d2)
-*/
 
 #endif
