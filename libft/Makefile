@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/15 20:31:56 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/20 13:07:19 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ $(O_LOC)%.o: $(C_LOC)%.c
 	@$(eval COUNTER = $(shell echo $$(( $(COUNTER) + 1 ))))
 	@gcc $(C_FLAGS) $(H_LOC) -o $@ -c $<
 	@printf "\033[10000D"
-	@loading_bar $(COUNTER) $(NUM_FILES) 30
+	@./bin/loading_bar $(COUNTER) $(NUM_FILES) 30
 
 clean:
 	@/bin/rm -rf $(O_SRC)

@@ -14,6 +14,8 @@
 
 void			init_sha256(t_sha256 *sha)
 {
+	int		i;
+
 	sha->h0 = 0x6a09e667;
 	sha->h1 = 0xbb67ae85;
 	sha->h2 = 0x3c6ef372;
@@ -25,6 +27,9 @@ void			init_sha256(t_sha256 *sha)
 	init_sha256_k_table1(sha);
 	init_sha256_k_table2(sha);
 	init_sha256_k_table3(sha);
+	i = -1;
+	while (++i < 64)
+		sha->k[i] = swap_endian32(sha->k[i]);
 }
 
 void			init_sha256_k_table1(t_sha256 *sha)
