@@ -211,4 +211,13 @@ void					append_bits_sha256(t_ssl *s, t_sha256 *sha, char *i);
 char					*build_sha256_output(t_sha256 *sha);
 void					clean_sha256(t_sha256 *sha);
 
+/*
+**	To create new crypto algorithm:
+**	-------------------------------
+**	1) Add to handle_command the initializing for the new algo
+**	2) Create a valid flags macro for that algorithm
+**	3) Add to Message Digest Commands macro the new name
+**	4) Create the handle_flags and execute functions for the algorithm
+*/
+
 #endif
