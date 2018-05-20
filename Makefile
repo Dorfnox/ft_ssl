@@ -21,7 +21,7 @@ FILES = main \
 		output \
 		endian \
 		flags_md5 execute_md5 init_md5 \
-		flags_sha256 execute_sha256 init_sha256 \
+		flags_sha256 execute_sha256 execute_sha256_helper init_sha256 \
 
 C_FLAGS = -Wall -Wextra -Werror
 

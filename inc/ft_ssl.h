@@ -198,6 +198,12 @@ void					init_sha256_k_table2(t_sha256 *sha);
 void					init_sha256_k_table3(t_sha256 *sha);
 
 char					*execute_sha256(t_ssl *ssl, char *input);
+void					init_words(t_sha256 *sha, size_t *k);
+void					init_working_variables(t_sha256 *sha);
+void					perform_algorithm(t_sha256 *sha);
+void					add_to_digest(t_sha256 *sha);
+
+
 void					append_bits_sha256(t_ssl *s, t_sha256 *sha, char *i);
 char					*build_sha256_output(t_sha256 *sha);
 void					clean_sha256(t_sha256 *sha);
