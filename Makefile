@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/03/20 18:04:46 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/20 16:53:16 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ FILES = main \
 		endian \
 		execute \
 		md5_flags 	  md5_init     md5_execute \
-		sha256_flags  sha256_init  sha256_execute  sha256_execute2
+		sha256_flags  sha256_init  sha256_execute  sha256_execute2 \
+		sha224_execute
 
 C_FLAGS = -Wall -Wextra -Werror
 
@@ -74,7 +75,7 @@ $(O_LOC)%.o: $(C_LOC)%.c $(HEADERS)
 
 $(LIB_SRC): force
 	@echo "$(YELLOW)----------- Checking Libft Library -----------$(END_COLOUR)"
-	@printf "$(YELLOW_LIGHT)$@ re-compile status: $(END_COLOUR)"
+	@printf "$(YELLOW_LIGHT)$@ re-compile status: $(END_COLOUR)\n"
 	@make -C $(LIB_LOC)
 	@echo "$(YELLOW)----------- Library Check Complete -----------$(END_COLOUR)"
 

@@ -18,23 +18,29 @@
 
 unsigned int	handle_command(t_ssl *ssl, char **av)
 {
-	int		success;
+	unsigned int	success;
 
 	success = 0;
 	if (SE_("md5", *av) && (success = 1))
 	{
 		init_command_settings(ssl, "md5", "MD5", VALID_MD5_FLAGS);
-		ssl->enc_type = MD5;
 		ssl->handle_flags = handle_md5_flags;
 		ssl->execute_func = execute_md5;
 	}
 	else if (SE_("sha256", *av) && (success = 1))
 	{
 		init_command_settings(ssl, "sha256", "SHA256", VALID_SHA256_FLAGS);
-		ssl->enc_type = SHA_256;
 		ssl->handle_flags = handle_sha256_flags;
 		ssl->execute_func = execute_sha256;
 	}
+	else if (SE_("sha224", *av) && (success = 1))
+	{
+		init_command_settings(ssl, "sha224", "SHA224", VALID_SHA224_FLAGS);
+		ssl->handle_flags = handle_sha256_flags;
+		ssl->execute_func = execute_sha224;
+	}
+	else
+		ft_pflite("ft_ssl: error: '%s' is an invalid command.\n\n", *av);
 	return (success);
 }
 

@@ -15,12 +15,16 @@
 
 # define USAGE "usage: ft_ssl command [command opts] [command args]\n"
 
-# define MESSAGE_DIGEST_COMMANDS "Message Digest commands:\nmd5\nsha256\n"
+# define MDC_A "Message Digest Commands:\n"
+# define MDC_B "md5\tsha256\tsha224\n"
+# define MESSAGE_DIGEST_COMMANDS MDC_A MDC_B
+
 # define COMMANDS MESSAGE_DIGEST_COMMANDS
 # define MAX_COMMAND_SIZE 32
 
 # define VALID_MD5_FLAGS "-p\n-q\n-r\n-s\n"
 # define VALID_SHA256_FLAGS "-p\n-q\n-r\n-s\n"
+# define VALID_SHA224_FLAGS "-p\n-q\n-r\n-s\n"
 
 # define FLAG_ERR1 ft_str256(2, *(av - 1), ": requires an argument\n")
 

@@ -16,12 +16,6 @@
 # include "libft.h"
 # include "ft_ssl_macros.h"
 
-enum					e_enc_type
-{
-	MD5 = 1,
-	SHA_256
-};
-
 enum					e_output_type
 {
 	STDIN_OUTPUT = 1,
@@ -39,7 +33,6 @@ typedef struct			s_flags
 
 typedef struct			s_ft_ssl
 {
-	unsigned int		enc_type;
 	char				*cmd_name_lower;
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
@@ -193,7 +186,7 @@ char					*build_md5_output(t_md5 *md5);
 void					clean_md5(t_md5 *md5);
 
 /*
-**	SHA-256
+**	SHA256
 */
 
 void					init_sha256(t_sha256 *sha);
@@ -210,6 +203,14 @@ void					add_to_digest(t_sha256 *sha);
 void					append_bits_sha256(t_ssl *s, t_sha256 *sha, char *i);
 char					*build_sha256_output(t_sha256 *sha);
 void					clean_sha256(t_sha256 *sha);
+
+/*
+**	SHA224
+*/
+
+void					init_sha224(t_sha256 *sha);
+char					*execute_sha224(t_ssl *ssl, char *input);
+char					*build_sha224_output(t_sha256 *sha);
 
 /*
 **	To create new crypto algorithm:
