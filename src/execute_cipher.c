@@ -21,7 +21,7 @@ void		execute_cipher(t_ssl *ssl)
 	char	*input;
 	char	*output;
 
-	input = ssl->f.i ? input_from_stdin(ssl) : input_from_file(ssl);
+	input = ssl->f.i ? input_from_file(ssl) : input_from_stdin(ssl);
 	if (!input)
 		return ;
 	output = ssl->enc_func(ssl, input);

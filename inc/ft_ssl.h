@@ -69,6 +69,10 @@ typedef union			u_64u
 	uint8_t				p8[8];
 }						t_64bitunion;
 
+/*
+**	Message Digest Structs
+*/
+
 typedef struct			s_md5
 {
 	uint32_t			a;
@@ -115,6 +119,24 @@ typedef struct			s_sha256
 	uint32_t			h;
 	uint8_t				*data;
 }						t_sha256;
+
+/*
+**	Cipher Structs
+*/
+
+typedef struct			s_base64
+{
+	int					i;
+	int					j;
+	int					k;
+	int					res_a;
+	int					res_b;
+	int					res_c;
+	int					res_d;
+	int					res_e;
+	int					input_len;
+	int					output_len;
+}						t_base64;
 
 /*
 **	Error handling
@@ -241,6 +263,9 @@ char					*build_sha224_output(t_sha256 *sha);
 */
 
 char					*execute_base64(t_ssl *ssl, char *input);
+char					*base64_encrypt(t_ssl *ssl, char *input);
+char					*base64_decrypt(t_ssl *ssl, char *input);
+int						*get_decrypt_table(char *input, int i_len, int *o_len);
 
 /*
 **	To create new crypto algorithm:

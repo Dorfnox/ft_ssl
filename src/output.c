@@ -57,13 +57,12 @@ void	output_filename(t_ssl *ssl, char *input, char *output)
 void	output_to_file_or_stdout(t_ssl *ssl, char *input, char *output)
 {
 	(void)input;
-	if (ssl->f.o)
+	if (!ssl->f.o)
 	{
-		writetofile(ssl->out_file, output);
+		write(1, output, ft_strlen(output));
 	}
 	else
 	{
-		write(1, output, ft_strlen(output));
-		write(1, "\n", 1);
+		writetofile(ssl->out_file, output);
 	}
 }

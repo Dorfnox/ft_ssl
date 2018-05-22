@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pflite.c                                        :+:      :+:    :+:   */
+/*   ft_pf_pflite.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/06 18:16:44 by bpierce           #+#    #+#             */
-/*   Updated: 2018/01/06 18:24:00 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/22 14:45:39 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	ft_pflite_print_chars(va_list *ap, char *temp)
+static void			ft_pflite_print_chars(va_list *ap, char *temp)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -30,7 +30,7 @@ static void	ft_pflite_print_chars(va_list *ap, char *temp)
 	}
 }
 
-void		ft_pflite(char *s, ...)
+void				ft_pflite(char *s, ...)
 {
 	va_list			ap;
 	unsigned int	i;

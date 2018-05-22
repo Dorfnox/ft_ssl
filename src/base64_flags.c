@@ -16,8 +16,11 @@ unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 {
 	while (*av)
 	{
-		if (handle_base64_regular_flags(ssl, av))
-			;
+		if (SE_2(*av, "-d", "-e"))
+		{
+			if (!(handle_base64_regular_flags(ssl, av)))
+				return (0);
+		}
 		else if (SE_("-i", *av))
 		{
 			if (!handle_i_parameter(ssl, ++av))
@@ -32,6 +35,7 @@ unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 			return ((ssl->flag_error = FLAG_ERR2(*av)) ? 0 : 0);
 		++av;
 	}
+	ssl->f.e = ssl->f.d ? 0 : 1;
 	return (1);
 }
 
@@ -59,7 +63,7 @@ unsigned int	handle_i_parameter(t_ssl *ssl, char **av)
 	if (ssl->f.i && (ssl->flag_error = FLAG_ERR4("-i")))
 		return (0);
 	ssl->in_file = *av;
-	return (1);
+	return ((ssl->f.i = 1));
 }
 
 unsigned int	handle_o_parameter(t_ssl *ssl, char **av)
@@ -69,5 +73,5 @@ unsigned int	handle_o_parameter(t_ssl *ssl, char **av)
 	if (ssl->f.o && (ssl->flag_error = FLAG_ERR4("-o")))
 		return (0);
 	ssl->out_file = *av;
-	return (1);
+	return ((ssl->f.o = 1));
 }
