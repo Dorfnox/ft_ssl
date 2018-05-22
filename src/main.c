@@ -21,13 +21,13 @@ int		main(int ac, char **av)
 	ft_bzero(&ssl, sizeof(t_ssl));
 	if (!(handle_command(&ssl, av + 1)))
 	{
-		return (ssl_error(NULL, COMMANDS, 1));
+		return (ssl_error(NULL, COMMAND_ERROR, 1));
 	}
 	if (!(ssl.handle_flags(&ssl, av + 2)))
 	{
-		return (ssl_error(ssl.cmd_name_lower, ssl.flag_error, 1));
+		return (ssl_error(ssl.cmd_name_lower, FLAG_ERROR, 1));
 	}
-	execute_all(&ssl);
+	ssl.execute_func(&ssl);
 	clean_up(&ssl);
 	return (0);
 }

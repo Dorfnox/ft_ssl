@@ -29,6 +29,10 @@ typedef struct			s_flags
 	unsigned int		q:1;
 	unsigned int		r:1;
 	unsigned int		s:1;
+	unsigned int		e:1;
+	unsigned int		d:1;
+	unsigned int		i:1;
+	unsigned int		o:1;
 }						t_f;
 
 typedef struct			s_ft_ssl
@@ -40,11 +44,14 @@ typedef struct			s_ft_ssl
 	char				*flag_error;
 	char				**input_files;
 	char				*filename;
+	char				*in_file;
+	char				*out_file;
 	char				**given_strings;
 	char				*given_string;
 	size_t				input_len;
+	void				(*execute_func)(struct s_ft_ssl *);
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
-	char				*(*execute_func)(struct s_ft_ssl *, char *);
+	char				*(*enc_func)(struct s_ft_ssl *, char *);
 }						t_ssl;
 
 typedef union			u_32u
@@ -123,15 +130,21 @@ void					clean_up(t_ssl *ssl);
 */
 
 unsigned int			handle_command(t_ssl *ssl, char **av);
-void					init_command_settings(
-						t_ssl *ssl, char *sn, char *ln, char *valid_flags);
+unsigned int			handle_command_2(t_ssl *ssl, char **av);
+void					init_command_settings(t_ssl *ssl, char *sn,
+						char *ln, char *valid_flags);
+unsigned int			collect_given_parameter(char ***save, char *param);
 
 unsigned int			handle_md5_flags(t_ssl *ssl, char **av);
 unsigned int			handle_md5_regular_flags(t_ssl *ssl, char **av);
+
 unsigned int			handle_sha256_flags(t_ssl *ssl, char **av);
 unsigned int			handle_sha256_regular_flags(t_ssl *ssl, char **av);
 
-unsigned int			collect_given_parameter(char ***save, char *param);
+unsigned int			handle_base64_flags(t_ssl *ssl, char **av);
+unsigned int			handle_base64_regular_flags(t_ssl *ssl, char **av);
+unsigned int			handle_i_parameter(t_ssl *ssl, char **av);
+unsigned int			handle_o_parameter(t_ssl *ssl, char **av);
 
 /*
 **	Input handling
@@ -147,9 +160,10 @@ char					*input_from_given_string(t_ssl *ssl);
 **	----------------------------------------------------------------------------
 */
 
-void					output_stdin(t_ssl *ssl, char *input, char *output);
-void					output_given_string(t_ssl *ssl, char *input, char *out);
-void					output_filename(t_ssl *ssl, char *input, char *output);
+void					output_stdin(t_ssl *ssl, char *input, char *outputt);
+void					output_given_string(t_ssl *ssl, char *in, char *out);
+void					output_filename(t_ssl *ssl, char *input, char *outp);
+void					output_to_file_or_stdout(t_ssl *s, char *i, char *o);
 
 /*
 **	Endian handling
@@ -165,11 +179,18 @@ uint64_t				swap_endian64(uint64_t a);
 */
 
 void					execute_all(t_ssl *ssl);
+
+void					execute_message_digest(t_ssl *ssl);
 void					execute_given_strings(t_ssl *ssl);
 void					execute_input_files(t_ssl *ssl);
 void					execute_general(t_ssl *ssl, char *input, int type);
 
+void					execute_cipher(t_ssl *ssl);
+
 /*
+**	Message Digest
+**	----------------------------------------------------------------------------
+**
 **	MD5
 */
 
@@ -211,6 +232,15 @@ void					clean_sha256(t_sha256 *sha);
 void					init_sha224(t_sha256 *sha);
 char					*execute_sha224(t_ssl *ssl, char *input);
 char					*build_sha224_output(t_sha256 *sha);
+
+/*
+**	Cipher
+**	----------------------------------------------------------------------------
+**
+**	BASE64
+*/
+
+char					*execute_base64(t_ssl *ssl, char *input);
 
 /*
 **	To create new crypto algorithm:

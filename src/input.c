@@ -17,7 +17,7 @@
 **	on the input.
 */
 
-char				*input_from_stdin(t_ssl *ssl)
+char		*input_from_stdin(t_ssl *ssl)
 {
 	char	*input;
 	char	*buffer[256];
@@ -49,16 +49,16 @@ char				*input_from_stdin(t_ssl *ssl)
 **	Collects the files contents, sets input_len and returns the input
 */
 
-char				*input_from_file(t_ssl *ssl)
+char		*input_from_file(t_ssl *ssl)
 {
 	char	*input;
 
-	ssl->input_len = getfilecontents(ssl->filename, &input);
+	ssl->input_len = getfilecontents(ssl->in_file, &input);
 	if (!input)
 	{
 		ft_pflite("%s: %s: %s: %s\n",
 			"ft_ssl",
-			ssl->cmd_name_lower, ssl->filename,
+			ssl->cmd_name_lower, ssl->in_file,
 			"no such file or directory");
 		return (NULL);
 	}
@@ -69,7 +69,7 @@ char				*input_from_file(t_ssl *ssl)
 **	Performs a basic strdup and stores the length of the string
 */
 
-char				*input_from_given_string(t_ssl *ssl)
+char		*input_from_given_string(t_ssl *ssl)
 {
 	char	*input;
 	int		i;

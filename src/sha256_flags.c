@@ -22,10 +22,10 @@ unsigned int	handle_sha256_flags(t_ssl *ssl, char **av)
 		{
 			ssl->f.s = collect_given_parameter(&ssl->given_strings, *(++av));
 			if (!ssl->f.s)
-				return ((ssl->flag_error = FLAG_ERR1) ? 0 : 0);
+				return ((ssl->flag_error = FLAG_ERR1("-s")) ? 0 : 0);
 		}
 		else if (CE_('-', **av))
-			return ((ssl->flag_error = FLAG_ERR2) ? 0 : 0);
+			return ((ssl->flag_error = FLAG_ERR2(*av)) ? 0 : 0);
 		else
 		{
 			ssl->input_files = av;

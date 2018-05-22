@@ -14,14 +14,16 @@ NAME = ft_ssl
 
 FILES = main \
 		error \
-		flags \
+		arguments \
 		input \
 		output \
 		endian \
-		execute \
-		md5_flags 	  md5_init     md5_execute \
-		sha256_flags  sha256_init  sha256_execute  sha256_execute2 \
-		sha224_execute
+		execute_message_digest \
+			md5_flags 	  md5_init     md5_execute \
+			sha256_flags  sha256_init  sha256_execute  sha256_execute2 \
+			sha224_execute \
+		execute_cipher \
+			base64_flags base64_execute
 
 C_FLAGS = -Wall -Wextra -Werror
 

@@ -24,7 +24,7 @@ void	output_stdin(t_ssl *ssl, char *input, char *output)
 	{
 		len = ft_strlen(input);
 		write(1, input, len);
-		if (input[len - 1] != '\n')
+		if (len > 0 && input[len - 1] != '\n')
 			write(1, "\n", 1);
 	}
 	write(1, output, ft_strlen(output));
@@ -36,9 +36,9 @@ void	output_given_string(t_ssl *ssl, char *input, char *output)
 	if (ssl->f.q)
 		write(1, output, ft_strlen(output));
 	else if (ssl->f.r)
-		ft_printf("%s \"%s\"", output, input);
+		ft_pflite("%s \"%s\"", output, input);
 	else
-		ft_printf("%s (\"%s\") = %s", ssl->cmd_name_upper, input, output);
+		ft_pflite("%s (\"%s\") = %s", ssl->cmd_name_upper, input, output);
 	write(1, "\n", 1);
 }
 
@@ -48,8 +48,22 @@ void	output_filename(t_ssl *ssl, char *input, char *output)
 	if (ssl->f.q)
 		write(1, output, ft_strlen(output));
 	else if (ssl->f.r)
-		ft_printf("%s %s", output, ssl->filename);
+		ft_pflite("%s %s", output, ssl->in_file);
 	else
-		ft_printf("%s (%s) = %s", ssl->cmd_name_upper, ssl->filename, output);
+		ft_pflite("%s (%s) = %s", ssl->cmd_name_upper, ssl->in_file, output);
 	write(1, "\n", 1);
+}
+
+void	output_to_file_or_stdout(t_ssl *ssl, char *input, char *output)
+{
+	(void)input;
+	if (ssl->f.o)
+	{
+		writetofile(ssl->out_file, output);
+	}
+	else
+	{
+		write(1, output, ft_strlen(output));
+		write(1, "\n", 1);
+	}
 }
