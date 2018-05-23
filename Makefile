@@ -15,8 +15,9 @@ NAME = ft_ssl
 FILES = main \
 		error \
 		arguments \
+		flag_queue \
 		flags \
-		flags_queue \
+		flags_2 \
 		input \
 		output \
 		endian \

@@ -42,12 +42,12 @@ typedef struct			s_ft_ssl
 	t_queue				*flag_queue;
 	char				*flag_error;
 	char				**input_files;
-	char				*filename;
 	char				*in_file;
 	char				*out_file;
 	char				**given_strings;
 	char				*given_string;
 	size_t				input_len;
+	char				*key;
 	void				(*execute_func)(struct s_ft_ssl *);
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
 	char				*(*enc_func)(struct s_ft_ssl *, char *);

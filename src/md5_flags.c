@@ -14,35 +14,25 @@
 
 unsigned int	handle_md5_flags(t_ssl *ssl, char **av)
 {
-	while (*av)
+	ssl->flag_queue = initq();
+	enqueue(ssl->flag_queue, p_flag);
+	enqueue(ssl->flag_queue, q_flag);
+	enqueue(ssl->flag_queue, r_flag);
+	enqueue(ssl->flag_queue, s_flag);
+	if (!flag_handler(ssl, &av))
 	{
-		if (handle_md5_regular_flags(ssl, av))
-			;
-		else if (SE_("-s", *av))
-		{
-			ssl->f.s = collect_given_parameter(&ssl->given_strings, *(++av));
-			if (!ssl->f.s)
-				return ((ssl->flag_error = FLAG_ERR1("-s")) ? 0 : 0);
-		}
-		else if (CE_('-', **av))
+		if (ssl->flag_error)
+			return (0);
+		if (CE_('-', **av))
 			return ((ssl->flag_error = FLAG_ERR2(*av)) ? 0 : 0);
-		else
-		{
-			ssl->input_files = av;
-			break ;
-		}
-		++av;
+		ssl->input_files = av;
 	}
+	consolidate_md5_flags(ssl);
+	clean_flag_queue(ssl);
 	return (1);
 }
 
-unsigned int	handle_md5_regular_flags(t_ssl *ssl, char **av)
+void			consolidate_md5_flags(t_ssl *ssl)
 {
-	if (SE_("-p", *av))
-		return ((ssl->f.p = 1));
-	else if (SE_("-q", *av))
-		return ((ssl->f.q = 1));
-	else if (SE_("-r", *av))
-		return ((ssl->f.r = 1));
-	return (0);
+	(void)ssl;
 }

@@ -14,39 +14,19 @@
 
 unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 {
-	while (*av)
-	{
-		if (SE_2(*av, "-d", "-e"))
-		{
-			if (!(handle_base64_regular_flags(ssl, av)))
-				return (0);
-		}
-		else if (SE_2(*av, "-i", "-o"))
-		{
-			if (!(SE_(*av, "-i") ? i_flag(ssl, &av) : o_flag(ssl, &av)))
-				return (0);
-		}
-		else
-			return ((ssl->flag_error = FLAG_ERR2(*av)) ? 0 : 0);
-		++av;
-	}
-	ssl->f.e = ssl->f.d ? 0 : 1;
+	ssl->flag_queue = initq();
+	enqueue(ssl->flag_queue, d_flag);
+	enqueue(ssl->flag_queue, e_flag);
+	enqueue(ssl->flag_queue, i_flag);
+	enqueue(ssl->flag_queue, o_flag);
+	if (!flag_handler(ssl, &av))
+		return (0);
+	consolidate_base64_flags(ssl);
+	clean_flag_queue(ssl);
 	return (1);
 }
 
-unsigned int	handle_base64_regular_flags(t_ssl *ssl, char **av)
+void			consolidate_base64_flags(t_ssl *ssl)
 {
-	if (SE_("-d", *av))
-	{
-		if (ssl->f.e && (ssl->flag_error = FLAG_ERR3("-e")))
-			return (0);
-		return ((ssl->f.d = 1));
-	}
-	else if (SE_("-e", *av))
-	{
-		if (ssl->f.d && (ssl->flag_error = FLAG_ERR3("-d")))
-			return (0);
-		return ((ssl->f.e = 1));
-	}
-	return (0);
+	ssl->f.e = ssl->f.d ? 0 : 1;
 }

@@ -30,43 +30,51 @@ void					clean_up(t_ssl *ssl);
 **	----------------------------------------------------------------------------
 */
 
-unsigned int			handle_command(t_ssl *ssl, char **av);
-unsigned int			handle_command_2(t_ssl *ssl, char **av);
-void					init_command_settings(t_ssl *ssl, char *sn,
-						char *ln, char *valid_flags);
-unsigned int			collect_given_parameter(char ***save, char *param);
+unsigned int			handle_command(
+							t_ssl *ssl, char **av);
+unsigned int			handle_command_2(
+							t_ssl *ssl, char **av);
+void					init_command_settings(
+							t_ssl *ssl, char *sn, char *ln, char *valid_flags);
+unsigned int			collect_given_parameter(
+							char ***save, char *param);
 
 unsigned int			flag_handler(
-						t_ssl *ssl, char **av);
+							t_ssl *ssl, char ***av);
 void					*search_flag_queue(
-						t_node *n, char *flag);
+							t_node *n, char *flag);
 void					*search_for_flag(
-						t_node *n, unsigned int (*f)(t_ssl *, char ***));
+							t_node *n, unsigned int (*f)(t_ssl *, char ***));
 void					clean_flag_queue(
-						t_ssl *ssl);
+							t_ssl *ssl);
 
 /*
 **	General flags in flags.c
 */
+unsigned int			p_flag(t_ssl *ssl, char ***av);
+unsigned int			q_flag(t_ssl *ssl, char ***av);
+unsigned int			r_flag(t_ssl *ssl, char ***av);
+unsigned int			s_flag(t_ssl *ssl, char ***av);
 
 unsigned int			d_flag(t_ssl *ssl, char ***av);
 unsigned int			e_flag(t_ssl *ssl, char ***av);
 unsigned int			i_flag(t_ssl *ssl, char ***av);
 unsigned int			o_flag(t_ssl *ssl, char ***av);
 
+unsigned int			k_flag(t_ssl *ssl, char ***av);
 
 /*
 **	Specific flags
 */
 
 unsigned int			handle_md5_flags(t_ssl *ssl, char **av);
-unsigned int			handle_md5_regular_flags(t_ssl *ssl, char **av);
+void					consolidate_md5_flags(t_ssl *ssl);
 
 unsigned int			handle_sha256_flags(t_ssl *ssl, char **av);
-unsigned int			handle_sha256_regular_flags(t_ssl *ssl, char **av);
+void					consolidate_sha256_flags(t_ssl *ssl);
 
 unsigned int			handle_base64_flags(t_ssl *ssl, char **av);
-unsigned int			handle_base64_regular_flags(t_ssl *ssl, char **av);
+void					consolidate_base64_flags(t_ssl *ssl);
 
 unsigned int			handle_des_flags(t_ssl *ssl, char **av);
 void					consolidate_des_flags(t_ssl *ssl);
