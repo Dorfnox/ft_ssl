@@ -15,6 +15,8 @@ NAME = ft_ssl
 FILES = main \
 		error \
 		arguments \
+		flags \
+		flags_queue \
 		input \
 		output \
 		endian \
@@ -23,7 +25,8 @@ FILES = main \
 			sha256_flags  sha256_init  sha256_execute  sha256_execute2 \
 			sha224_execute \
 		execute_cipher \
-			base64_flags base64_execute
+			base64_flags base64_execute \
+			des_flags
 
 C_FLAGS = -Wall -Wextra -Werror
 

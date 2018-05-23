@@ -72,7 +72,7 @@
 # define FLAG_ERR2(a) ft_str256(6, FE_2A, (a), FE_2B, FE_2C, FE_2D, FE_2E)
 
 # define FE_3A "consolidate: flag '"
-# define FE_3B *av
+# define FE_3B **av
 # define FE_3C "' cannot be used with flag'"
 # define FLAG_ERR3(a) ft_str256(5, FE_3A, FE_3B, FE_3C, (a), "'\n")
 

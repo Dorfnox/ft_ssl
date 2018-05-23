@@ -39,6 +39,7 @@ typedef struct			s_ft_ssl
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
 	struct s_flags		f;
+	t_queue				*flag_queue;
 	char				*flag_error;
 	char				**input_files;
 	char				*filename;

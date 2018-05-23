@@ -21,14 +21,9 @@ unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 			if (!(handle_base64_regular_flags(ssl, av)))
 				return (0);
 		}
-		else if (SE_("-i", *av))
+		else if (SE_2(*av, "-i", "-o"))
 		{
-			if (!handle_i_parameter(ssl, ++av))
-				return (0);
-		}
-		else if (SE_("-o", *av))
-		{
-			if (!handle_o_parameter(ssl, ++av))
+			if (!(SE_(*av, "-i") ? i_flag(ssl, &av) : o_flag(ssl, &av)))
 				return (0);
 		}
 		else
@@ -54,24 +49,4 @@ unsigned int	handle_base64_regular_flags(t_ssl *ssl, char **av)
 		return ((ssl->f.e = 1));
 	}
 	return (0);
-}
-
-unsigned int	handle_i_parameter(t_ssl *ssl, char **av)
-{
-	if (!*av && (ssl->flag_error = FLAG_ERR1("-i")))
-		return (0);
-	if (ssl->f.i && (ssl->flag_error = FLAG_ERR4("-i")))
-		return (0);
-	ssl->in_file = *av;
-	return ((ssl->f.i = 1));
-}
-
-unsigned int	handle_o_parameter(t_ssl *ssl, char **av)
-{
-	if (!*av && (ssl->flag_error = FLAG_ERR1("-o")))
-		return (0);
-	if (ssl->f.o && (ssl->flag_error = FLAG_ERR4("-o")))
-		return (0);
-	ssl->out_file = *av;
-	return ((ssl->f.o = 1));
 }
