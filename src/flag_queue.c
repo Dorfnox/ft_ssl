@@ -26,14 +26,17 @@ unsigned int	flag_handler(t_ssl *ssl, char ***av)
 	while (**av)
 	{
 		flag_function = search_flag_queue(ssl->flag_queue->first, **av);
-		ft_printf("address: %p\n", *av);
 		if (!flag_function || !flag_function(ssl, av))
 			return (0);
-		ft_printf("address: %p\n", *av);
 		++(*av);
 	}
 	return (1);
 }
+
+/*
+**	Connects the given flag with a function pointer to return from the
+**	flag queue.
+*/
 
 void			*search_flag_queue(t_node *n, char *flag)
 {
@@ -53,6 +56,8 @@ void			*search_flag_queue(t_node *n, char *flag)
 		return (search_for_flag(n, d_flag));
 	else if (SE_(flag, "-e"))
 		return (search_for_flag(n, e_flag));
+	else if (SE_(flag, "-k"))
+		return (search_for_flag(n, k_flag));
 	return (NULL);
 }
 

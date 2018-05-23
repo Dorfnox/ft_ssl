@@ -16,8 +16,9 @@ FILES = main \
 		error \
 		arguments \
 		flag_queue \
-		flags \
-		flags_2 \
+		flags_p_q_r_s \
+		flags_d_e_i_o \
+		flags_k \
 		input \
 		output \
 		endian \

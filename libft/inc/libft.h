@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/21 19:19:51 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/22 20:02:00 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,5 +215,6 @@ int					isemptys(t_stack *s);
 
 size_t				getfilecontents(char *filename, char **contents);
 size_t				writetofile(char *filename, char *contents);
+void				printbits(void *array, size_t size);
 
 #endif

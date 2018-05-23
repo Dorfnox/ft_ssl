@@ -28,4 +28,5 @@ void		execute_cipher(t_ssl *ssl)
 	output_to_file_or_stdout(ssl, input, output);
 	free(input);
 	free(output);
+	free(ssl->k.user_key);
 }

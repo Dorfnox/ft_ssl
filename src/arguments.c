@@ -47,6 +47,12 @@ unsigned int	handle_command_2(t_ssl *ssl, char **av)
 		ssl->handle_flags = handle_base64_flags;
 		ssl->enc_func = execute_base64;
 	}
+	else if (SE_("des-ecb", *av) && (ssl->execute_func = execute_cipher))
+	{
+		init_command_settings(ssl, "des-ecb", "DES-ECB", VALID_DES_FLAGS);
+		ssl->handle_flags = handle_des_flags;
+		ssl->enc_func = execute_base64;
+	}
 	else
 		ssl->flag_error = FLAG_ERR0(*av);
 	return (ssl->execute_func ? 1 : 0);

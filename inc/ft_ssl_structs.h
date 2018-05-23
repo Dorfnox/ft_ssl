@@ -31,13 +31,21 @@ typedef struct			s_flags
 	unsigned int		i:1;
 	unsigned int		o:1;
 	unsigned int		a:1;
+	unsigned int		k:1;
 }						t_f;
+
+typedef struct			s_keys
+{
+	char				*user_key;
+	uint64_t			key;
+}						t_keys;
 
 typedef struct			s_ft_ssl
 {
 	char				*cmd_name_lower;
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
+	struct s_keys		k;
 	struct s_flags		f;
 	t_queue				*flag_queue;
 	char				*flag_error;
@@ -47,7 +55,6 @@ typedef struct			s_ft_ssl
 	char				**given_strings;
 	char				*given_string;
 	size_t				input_len;
-	char				*key;
 	void				(*execute_func)(struct s_ft_ssl *);
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
 	char				*(*enc_func)(struct s_ft_ssl *, char *);

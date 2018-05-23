@@ -13,6 +13,7 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
+# include <readpassphrase.h>
 # include "libft.h"
 # include "ft_ssl_structs.h"
 # include "ft_ssl_macros.h"
@@ -49,8 +50,9 @@ void					clean_flag_queue(
 							t_ssl *ssl);
 
 /*
-**	General flags in flags.c
+**	General flags in flags_*.c
 */
+
 unsigned int			p_flag(t_ssl *ssl, char ***av);
 unsigned int			q_flag(t_ssl *ssl, char ***av);
 unsigned int			r_flag(t_ssl *ssl, char ***av);
@@ -62,9 +64,11 @@ unsigned int			i_flag(t_ssl *ssl, char ***av);
 unsigned int			o_flag(t_ssl *ssl, char ***av);
 
 unsigned int			k_flag(t_ssl *ssl, char ***av);
+char					*get_key_from_user(char *given_key);
+int						does_not_contain_hex_characters_or_is_null(char *key);
 
 /*
-**	Specific flags
+**	Specific flag handling for each different encryption type
 */
 
 unsigned int			handle_md5_flags(t_ssl *ssl, char **av);
@@ -181,7 +185,7 @@ char					*base64_decrypt(t_ssl *ssl, char *input);
 int						*get_decrypt_table(char *input, int i_len, int *o_len);
 
 /*
-**	DESCBC
+**	DES-ECB
 */
 
 

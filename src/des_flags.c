@@ -19,6 +19,7 @@ unsigned int	handle_des_flags(t_ssl *ssl, char **av)
 	enqueue(ssl->flag_queue, e_flag);
 	enqueue(ssl->flag_queue, i_flag);
 	enqueue(ssl->flag_queue, o_flag);
+	enqueue(ssl->flag_queue, k_flag);
 	if (!flag_handler(ssl, &av))
 		return (0);
 	consolidate_des_flags(ssl);
