@@ -197,12 +197,9 @@ void					left_shift_des_keys(t_des *des);
 void					create_des_subkeys(t_des *des);
 
 char					*execute_des_ecb(t_ssl *ssl, char *input);
-void					create_message_block(t_ssl *ss, t_des *des, char **inp);
-
-void					process_permutation_using_subkeys(t_des *des);
-uint32_t				apply_des_subkey(t_des *des, uint32_t b, uint64_t key);
-uint64_t				get_ebit(t_des *des, uint32_t block);
-
+uint64_t				create_message_block(char **input);
+uint64_t				process_des_ecb(t_des *des, uint64_t message);
+uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
 void					clean_des_ecb(t_des *des);
 
 /*

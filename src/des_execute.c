@@ -14,26 +14,34 @@
 
 /*
 **	Main execution loop for des-ecb encryption (electronic cookbook)
+**	REQUIRES a '\0' char string as input;
 */
 
 char		*execute_des_ecb(t_ssl *ssl, char *input)
 {
-	t_des	des;
-	char	*output;
+	t_des		des;
+	uint64_t	message;
+	uint64_t	encryption;
+	char		*output;
+	size_t		len;
 
 	des.user_key = ssl->user_key;
 	init_des(&des);
-	output = NULL;
-	while (ssl->input_len)
+	if (!(output = ft_strnew(ssl->input_len +
+		(!(ssl->input_len % 8) ? 0 : 8 - (ssl->input_len % 8)))))
+		return (NULL);
+	len = 0;
+	while (len < ssl->input_len)
 	{
-		DB("message");
-		create_message_block(ssl, &des, &input);
-		printbits_little_endian(&des.message, 8);
-		DB("initial permutation");
-		des.initial_perm = permutated_choice(des.message, des.ip_table, 64);
-		printbits_little_endian(&des.initial_perm, 8);
-		DB("subkey application");
-		process_permutation_using_subkeys(&des);
+		message = create_message_block(&input);
+		message = 0x0123456789abcdef; // REMOVE - this is for testing
+		DB("Message");
+		printbits_little_endian(&message, 8);
+		encryption = process_des_ecb(&des, message);
+		DB("Encrypted Message");
+		printbits_little_endian(&encryption, 8);
+		ft_memcpy(&output[len], &encryption, 8);
+		len += 8;
 	}
 	clean_des_ecb(&des);
 	return (output);
@@ -44,96 +52,87 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 **	then moves the input pointer for next cycle;
 */
 
-void		create_message_block(t_ssl *ssl, t_des *des, char **input)
+uint64_t	create_message_block(char **input)
 {
-	int		i;
+	int			i;
+	uint64_t	message;
 
 	i = -1;
-	des->message = 0;
-	while (ssl->input_len && ssl->input_len-- && ++i < 8)
-		des->message |= ((uint64_t)(*input)[i] << (56 - (i * 8)));
-	*input += ssl->input_len != 0 ? 8 : 0;
-	des->message = 0x0123456789abcdef; // REMOVE - this is for testing
+	message = 0;
+	while (**input && ++i < 8)
+	{
+		message |= ((uint64_t)(**input) << (56 - (i * 8)));
+		++(*input);
+	}
+	return (message);
 }
 
 /*
-**	16 iterations 
+**	1) Applies an initial permutation to turn 64 bit message into 56 bit.
+**	2) Runs 16 iterations of the des algorithm on right permutation.
+**	3) After each iteration the left block becomes the previous right,
+**	and the right block is the result of the des algorithm.
+**	4) The final left and right are concatenated together in reverse order.
+**	5) Return is a final permutation of the right-left concatenation using
+**	the inverse table.
 */
 
-void		process_permutation_using_subkeys(t_des *des)
+uint64_t	process_des_ecb(t_des *des, uint64_t message)
 {
 	uint64_t	left;
 	uint64_t	right;
 	uint64_t	reverse;
-	uint64_t	output;
 	int			i;
 
+	des->initial_perm = permutated_choice(message, des->ip_table, 64);
 	left = des->initial_perm >> 32;
 	right = des->initial_perm & 0xFFFFFFFF;
 	des->l[0] = right;
-	des->r[0] = left ^ apply_des_subkey(des, right, des->subkey[0]);
-	printbits_little_endian(&des->l[0], 4);
-	printbits_little_endian(&des->r[0], 4);
+	des->r[0] = left ^ des_alg(des, right, des->subkey[0]);
 	i = 0;
 	while (++i < 16)
 	{
 		des->l[i] = des->r[i - 1];
-		des->r[i] = des->l[i - 1] ^ apply_des_subkey(des, des->r[i - 1], des->subkey[i]);
+		des->r[i] = des->l[i - 1] ^ des_alg(des, des->r[i - 1], des->subkey[i]);
 	}
 	reverse = ((uint64_t)des->r[15] << 32) | (uint64_t)des->l[15];
-	i = -1;
-	output = 0;
-	while (++i < 64)
-		output |= ((reverse >> (64 - des->inverse_table[i])) & 1) << (64 - (i + 1));
-	DB("Result");
-	printbits_little_endian(&output, 8);
-	exit(0);
+	return (permutated_choice(reverse, des->inverse_table, 64));
 }
 
-uint32_t	apply_des_subkey(t_des *des, uint32_t block, uint64_t key)
+/*
+**	1) Uses the ebit table to expand the current block from 32 to 48 bits.
+**	2) XOR's the subkey with the current block after ebit expansion.
+**	3) Uses the S Tables to create a new 32 bit block.
+**	4) Return is a new block shifted around using the P Table.
+*/
+
+uint32_t	des_alg(t_des *des, uint32_t block, uint64_t key)
 {
-	uint64_t	ebit48;
 	uint64_t	xor;
 	int			row;
 	int			col;
 	int			i;
-	uint32_t	out;
-	uint32_t		out2;
+	uint32_t	output;
 
-	printbits_little_endian(&block, 4);
-	ebit48 = get_ebit(des, block);
-	DB("ebit");
-	printbits_little_endian(&ebit48, 8);
-	xor = ebit48 ^ key;
-	DB("xor");
-	printbits_little_endian(&xor, 8);
 	i = -1;
-	out = 0;
-	while (++i < 8 || !(i = -1))
+	xor = 0;
+	while (++i < 48)
+		xor |= (((uint64_t)block >> (32 - des->ebit[i])) & 1) << (48 - (i + 1));
+	xor ^= key;
+	i = -1;
+	block = 0;
+	while (++i < 8)
 	{
 		row = (xor >> (42 - (6 * i))) & 0x3F;
 		col = (row >> 1) & 0xF;
 		row = ((row >> 4) & 2) | (row & 1);
-		out |= (uint32_t)des->s[i][row][col] << (28 - (4 * i));
+		block |= (uint32_t)des->s[i][row][col] << (28 - (4 * i));
 	}
-	out2 = 0;
-	while (++i < 32)
-		out2 |= ((out >> (32 - des->p_table[i])) & 1) << (32 - (i + 1));
-	printbits_little_endian(&out, 4);
-	printbits_little_endian(&out2, 4);
-	return (out2);
-}
-
-uint64_t	get_ebit(t_des *des, uint32_t b)
-{
-	uint64_t	ebit;
-	int			i;
-
 	i = -1;
-	ebit = 0;
-	while (++i < 48)
-		ebit |= (((uint64_t)b >> (32 - des->ebit[i])) & 1) << (48 - (i + 1));
-	return (ebit);
+	output = 0;
+	while (++i < 32)
+		output |= ((block >> (32 - des->p_table[i])) & 1) << (32 - (i + 1));
+	return (output);
 }
 
 void		clean_des_ecb(t_des *des)

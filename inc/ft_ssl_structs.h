@@ -145,7 +145,6 @@ typedef struct			s_des
 	uint32_t			l[16];
 	uint32_t			r[16];
 	uint64_t			subkey[16];
-	uint64_t			message;
 	uint64_t			initial_perm;
 	char				*user_key;
 	int					*pc1;
