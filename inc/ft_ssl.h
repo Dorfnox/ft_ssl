@@ -189,12 +189,9 @@ int						*get_decrypt_table(char *input, int i_len, int *o_len);
 */
 
 void					init_des(t_des *des);
+void					initialize_des_keys(t_des *des, char *user_key);
 uint64_t				key_string_to_hex(char *hex_string);
-int						char_to_hex(int a);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
-
-void					left_shift_des_keys(t_des *des);
-void					create_des_subkeys(t_des *des);
 
 char					*execute_des_ecb(t_ssl *ssl, char *input);
 uint64_t				create_message_block(char **input);

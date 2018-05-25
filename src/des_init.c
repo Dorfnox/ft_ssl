@@ -33,10 +33,29 @@ void		init_des(t_des *des)
 	GET_S8;
 	des->p_table = ft_intarrayfromstr(P_TABLE);
 	des->inverse_table = ft_intarrayfromstr(INVERSE_TABLE);
-	//
-	des->key = key_string_to_hex(des->user_key);
+}
+
+void		initialize_des_keys(t_des *des, char *user_key)
+{
+	int			i;
+	uint64_t	lr;
+
+	des->key = key_string_to_hex(user_key);
 	des->key_pc1 = permutated_choice(des->key, des->pc1, 56);
-	create_des_subkeys(des);
+	des->l[0] = LEFT_ROT_28(des->key_pc1 >> 28, des->shifts[0]);
+	des->r[0] = LEFT_ROT_28(des->key_pc1 & 0xFFFFFFF, des->shifts[0]);
+	i = 0;
+	while (++i < 16)
+	{
+		des->l[i] = LEFT_ROT_28(des->l[i - 1], des->shifts[i]);
+		des->r[i] = LEFT_ROT_28(des->r[i - 1], des->shifts[i]);
+	}
+	i = -1;
+	while (++i < 16)
+	{
+		lr = ((uint64_t)des->l[i] << 28) | (uint64_t)des->r[i];
+		des->subkey[i] = permutated_choice(lr, des->pc2, 48);
+	}
 }
 
 uint64_t	key_string_to_hex(char *key_string)
@@ -67,25 +86,4 @@ uint64_t	permutated_choice(uint64_t key, int *pc, int size)
 	while (++i < size)
 		newkey |= (key >> (MAX_64(size + 8) - pc[i]) & 1) << (size - (i + 1));
 	return (newkey);
-}
-
-void		create_des_subkeys(t_des *des)
-{
-	int			i;
-	uint64_t	lr;
-
-	des->l[0] = LEFT_ROT_28(des->key_pc1 >> 28, des->shifts[0]);
-	des->r[0] = LEFT_ROT_28(des->key_pc1 & 0xFFFFFFF, des->shifts[0]);
-	i = 0;
-	while (++i < 16)
-	{
-		des->l[i] = LEFT_ROT_28(des->l[i - 1], des->shifts[i]);
-		des->r[i] = LEFT_ROT_28(des->r[i - 1], des->shifts[i]);
-	}
-	i = -1;
-	while (++i < 16)
-	{
-		lr = ((uint64_t)des->l[i] << 28) | (uint64_t)des->r[i];
-		des->subkey[i] = permutated_choice(lr, des->pc2, 48);
-	}
 }

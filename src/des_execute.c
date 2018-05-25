@@ -25,8 +25,8 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	char		*output;
 	size_t		len;
 
-	des.user_key = ssl->user_key;
 	init_des(&des);
+	initialize_des_keys(&des, ssl->user_key);
 	if (!(output = ft_strnew(ssl->input_len +
 		(!(ssl->input_len % 8) ? 0 : 8 - (ssl->input_len % 8)))))
 		return (NULL);
