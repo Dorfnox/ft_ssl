@@ -34,18 +34,12 @@ typedef struct			s_flags
 	unsigned int		k:1;
 }						t_f;
 
-typedef struct			s_keys
-{
-	char				*user_key;
-	uint64_t			key;
-}						t_keys;
-
 typedef struct			s_ft_ssl
 {
 	char				*cmd_name_lower;
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
-	struct s_keys		k;
+	char				*user_key;
 	struct s_flags		f;
 	t_queue				*flag_queue;
 	char				*flag_error;
@@ -143,5 +137,25 @@ typedef struct			s_base64
 	int					input_len;
 	int					output_len;
 }						t_base64;
+
+typedef struct			s_des
+{
+	uint64_t			key;
+	uint64_t			key_pc1;
+	uint32_t			l[16];
+	uint32_t			r[16];
+	uint64_t			subkey[16];
+	uint64_t			message;
+	uint64_t			initial_perm;
+	char				*user_key;
+	int					*pc1;
+	int					*pc2;
+	int					*shifts;
+	int					*ip_table;
+	int					*ebit;
+	int					*s[8][4];
+	int					*p_table;
+	int					*inverse_table;
+}						t_des;
 
 #endif

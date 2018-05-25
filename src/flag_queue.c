@@ -26,7 +26,12 @@ unsigned int	flag_handler(t_ssl *ssl, char ***av)
 	while (**av)
 	{
 		flag_function = search_flag_queue(ssl->flag_queue->first, **av);
-		if (!flag_function || !flag_function(ssl, av))
+		if (!flag_function && CE_('-', ***av))
+		{
+			ssl->flag_error = FLAG_ERR2(**av);
+			return (0);
+		}
+		else if (!flag_function || !flag_function(ssl, av))
 			return (0);
 		++(*av);
 	}
@@ -76,6 +81,5 @@ void			clean_flag_queue(t_ssl *ssl)
 {
 	while (!isemptyq(ssl->flag_queue))
 		dequeue(ssl->flag_queue);
-	free(ssl->flag_queue);
-	ssl->flag_queue = NULL;
+	ft_memdel((void **)&ssl->flag_queue);
 }

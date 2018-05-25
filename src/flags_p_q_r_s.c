@@ -33,7 +33,7 @@ unsigned int	r_flag(t_ssl *ssl, char ***av)
 unsigned int	s_flag(t_ssl *ssl, char ***av)
 {
 	++(*av);
-	if (!collect_given_parameter(&ssl->given_strings, **av))
+	if (!ft_arrayappend(&ssl->given_strings, **av))
 	{
 		ssl->flag_error = FLAG_ERR1("-s");
 		return (0);

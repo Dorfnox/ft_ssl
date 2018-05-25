@@ -14,14 +14,16 @@
 
 unsigned int	d_flag(t_ssl *ssl, char ***av)
 {
-	if (ssl->f.e && (ssl->flag_error = FLAG_ERR3("-e")))
+	(void)av;
+	if (ssl->f.e && (ssl->flag_error = FLAG_ERR3("-d", "-e")))
 		return (0);
 	return ((ssl->f.d = 1));
 }
 
 unsigned int	e_flag(t_ssl *ssl, char ***av)
 {
-	if (ssl->f.d && (ssl->flag_error = FLAG_ERR3("-d")))
+	(void)av;
+	if (ssl->f.d && (ssl->flag_error = FLAG_ERR3("-e", "-d")))
 		return (0);
 	return ((ssl->f.e = 1));
 }

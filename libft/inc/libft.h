@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/22 20:02:00 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/23 16:25:33 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ char				**ft_arraydel(char ***array);
 void				ft_varraydel(void ***a, int i);
 char				**ft_arraydup(char **old);
 int					ft_arrayprint(char **a);
+unsigned int		ft_arrayappend(char ***save, char *param);
 void				ft_setdoubletozero(double *a, double *b, double *c,
 					double *d);
 void				ft_setunsignedinttozero(unsigned int *a, unsigned int *b,
@@ -215,6 +216,7 @@ int					isemptys(t_stack *s);
 
 size_t				getfilecontents(char *filename, char **contents);
 size_t				writetofile(char *filename, char *contents);
-void				printbits(void *array, size_t size);
+void				printbits_little_endian(void *array, size_t size);
+void				printbits_big_endian(void *array, size_t size);
 
 #endif

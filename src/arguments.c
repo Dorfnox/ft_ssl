@@ -51,7 +51,7 @@ unsigned int	handle_command_2(t_ssl *ssl, char **av)
 	{
 		init_command_settings(ssl, "des-ecb", "DES-ECB", VALID_DES_FLAGS);
 		ssl->handle_flags = handle_des_flags;
-		ssl->enc_func = execute_base64;
+		ssl->enc_func = execute_des_ecb;
 	}
 	else
 		ssl->flag_error = FLAG_ERR0(*av);
@@ -78,35 +78,3 @@ void			init_command_settings(
 	ssl->cmd_valid_flags = command_valid_flags;
 }
 
-/*
-**	Stores the given parameter in the given ***array
-**	Will reallocate **save if things already exist in the deferenced array
-*/
-
-unsigned int	collect_given_parameter(char ***save, char *param)
-{
-	char	**tmp;
-	int		i;
-
-	if (!param || !save)
-		return (0);
-	if ((tmp = *save))
-	{
-		i = -1;
-		while (tmp[++i])
-			;
-		tmp = malloc(sizeof(char *) * (i + 2));
-		ft_memcpy(tmp, *save, sizeof(char *) * i);
-		tmp[i] = param;
-		tmp[i + 1] = NULL;
-	}
-	else
-	{
-		tmp = malloc(sizeof(char *) * 2);
-		tmp[0] = param;
-		tmp[1] = NULL;
-	}
-	free(*save);
-	*save = tmp;
-	return (1);
-}

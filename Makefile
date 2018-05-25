@@ -28,7 +28,7 @@ FILES = main \
 			sha224_execute \
 		execute_cipher \
 			base64_flags base64_execute \
-			des_flags
+			des_flags des_init des_execute
 
 C_FLAGS = -Wall -Wextra -Werror
 

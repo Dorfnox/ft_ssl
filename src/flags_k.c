@@ -22,11 +22,9 @@ unsigned int	k_flag(t_ssl *ssl, char ***av)
 		ssl->flag_error = ft_str256(2, FLAG_ERR1("-k"), ERROR_HEX1);
 		return (0);
 	}
-	ssl->k.user_key = get_key_from_user(**av);
-	if (!ssl->k.user_key)
+	ssl->user_key = get_key_from_user(**av);
+	if (!ssl->user_key)
 		return (0);
-	DB(ssl->k.user_key);
-	printbits(ssl->k.user_key, 16);
 	// create_subkeys();
 	return ((ssl->f.k = 1));
 }

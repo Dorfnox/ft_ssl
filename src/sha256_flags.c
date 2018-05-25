@@ -20,19 +20,14 @@ unsigned int	handle_sha256_flags(t_ssl *ssl, char **av)
 	enqueue(ssl->flag_queue, r_flag);
 	enqueue(ssl->flag_queue, s_flag);
 	if (!flag_handler(ssl, &av))
-	{
-		if (ssl->flag_error)
-			return (0);
-		if (CE_('-', **av))
-			return ((ssl->flag_error = FLAG_ERR2(*av)) ? 0 : 0);
 		ssl->input_files = av;
-	}
-	consolidate_sha256_flags(ssl);
+	if (!(consolidate_sha256_flags(ssl)))
+		return (0);
 	clean_flag_queue(ssl);
 	return (1);
 }
 
-void			consolidate_sha256_flags(t_ssl *ssl)
+unsigned int	consolidate_sha256_flags(t_ssl *ssl)
 {
-	(void)ssl;
+	return (ssl->flag_error ? 0 : 1);
 }

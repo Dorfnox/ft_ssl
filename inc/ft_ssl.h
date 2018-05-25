@@ -72,16 +72,16 @@ int						does_not_contain_hex_characters_or_is_null(char *key);
 */
 
 unsigned int			handle_md5_flags(t_ssl *ssl, char **av);
-void					consolidate_md5_flags(t_ssl *ssl);
+unsigned int			consolidate_md5_flags(t_ssl *ssl);
 
 unsigned int			handle_sha256_flags(t_ssl *ssl, char **av);
-void					consolidate_sha256_flags(t_ssl *ssl);
+unsigned int			consolidate_sha256_flags(t_ssl *ssl);
 
 unsigned int			handle_base64_flags(t_ssl *ssl, char **av);
-void					consolidate_base64_flags(t_ssl *ssl);
+unsigned int			consolidate_base64_flags(t_ssl *ssl);
 
 unsigned int			handle_des_flags(t_ssl *ssl, char **av);
-void					consolidate_des_flags(t_ssl *ssl);
+unsigned int			consolidate_des_flags(t_ssl *ssl);
 
 
 
@@ -188,6 +188,22 @@ int						*get_decrypt_table(char *input, int i_len, int *o_len);
 **	DES-ECB
 */
 
+void					init_des(t_des *des);
+uint64_t				key_string_to_hex(char *hex_string);
+int						char_to_hex(int a);
+uint64_t				permutated_choice(uint64_t key, int *pc, int size);
+
+void					left_shift_des_keys(t_des *des);
+void					create_des_subkeys(t_des *des);
+
+char					*execute_des_ecb(t_ssl *ssl, char *input);
+void					create_message_block(t_ssl *ss, t_des *des, char **inp);
+
+void					process_permutation_using_subkeys(t_des *des);
+uint32_t				apply_des_subkey(t_des *des, uint32_t b, uint64_t key);
+uint64_t				get_ebit(t_des *des, uint32_t block);
+
+void					clean_des_ecb(t_des *des);
 
 /*
 **	To create new crypto algorithm:

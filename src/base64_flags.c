@@ -20,13 +20,19 @@ unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 	enqueue(ssl->flag_queue, i_flag);
 	enqueue(ssl->flag_queue, o_flag);
 	if (!flag_handler(ssl, &av))
+	{
+		if (!ssl->flag_error)
+			ssl->flag_error = FLAG_ERR2(*av);
 		return (0);
-	consolidate_base64_flags(ssl);
+	}
+	if (!(consolidate_base64_flags(ssl)))
+		return (0);
 	clean_flag_queue(ssl);
 	return (1);
 }
 
-void			consolidate_base64_flags(t_ssl *ssl)
+unsigned int	consolidate_base64_flags(t_ssl *ssl)
 {
-	ssl->f.e = ssl->f.d ? 0 : 1;
+	ssl->f.e = !ssl->f.d ? 1 : 0;
+	return (ssl->flag_error ? 0 : 1);
 }
