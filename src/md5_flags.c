@@ -14,16 +14,14 @@
 
 unsigned int	handle_md5_flags(t_ssl *ssl, char **av)
 {
-	ssl->flag_queue = initq();
-	enqueue(ssl->flag_queue, p_flag);
-	enqueue(ssl->flag_queue, q_flag);
-	enqueue(ssl->flag_queue, r_flag);
-	enqueue(ssl->flag_queue, s_flag);
+	add_flag(&ssl->flag_queue, "-p", p_flag);
+	add_flag(&ssl->flag_queue, "-q", q_flag);
+	add_flag(&ssl->flag_queue, "-r", r_flag);
+	add_flag(&ssl->flag_queue, "-s", s_flag);
 	if (!flag_handler(ssl, &av))
 		ssl->input_files = av;
 	if (!(consolidate_md5_flags(ssl)))
 		return (0);
-	clean_flag_queue(ssl);
 	return (1);
 }
 

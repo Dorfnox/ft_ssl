@@ -13,7 +13,16 @@
 #ifndef FT_SSL_MACROS_H
 # define FT_SSL_MACROS_H
 
+/*
+**	Global definitions
+*/
+
 # define USAGE "usage: ft_ssl command [command opts] [command args]\n"
+
+# define PBKDF_SALT_SIZE 16
+# define PBKDF_ALGO execute_sha256
+# define PBKDF_SALT ssl->user_salt
+# define PBKDF_PASSWORD ssl->user_password
 
 /*
 **	Commands
@@ -72,7 +81,7 @@
 # define FE_2E ssl->cmd_valid_flags
 # define FLAG_ERR2(a) ft_str256(6, FE_2A, (a), FE_2B, FE_2C, FE_2D, FE_2E)
 
-# define FE_3A "consolidate: flag '"
+# define FE_3A "flag '"
 # define FE_3B "' cannot be used with flag'"
 # define FLAG_ERR3(a, b) ft_str256(5, FE_3A, (a), FE_3B, (b), "'\n")
 
@@ -84,12 +93,28 @@
 **	Key Errors
 */
 
-# define ERROR_HEX1 "[32mDES encryption needs a 16-char HEX keycode.[0m\n"
-# define ERROR_HEX2 "The [1;31monly[0m acceptable hex characters are:\n"
-# define ERROR_HEX3 "[93m0123456789ABCDEFabcdef[0m\n"
-# define ERROR_HEX4 "Use any of these characters [31m1 - 16 times.[0m\n"
-# define ERROR_HEX5 "Enter a [92mnew hex key[0m: "
-# define ERROR_HEX ERROR_HEX1 ERROR_HEX2 ERROR_HEX3 ERROR_HEX4 ERROR_HEX5
+# define HEX_ERR1 "[32mDES encryption needs a 16-char HEX keycode.[0m\n"
+# define HEX_ERR2 "The [1;31monly[0m acceptable hex characters are:\n"
+# define HEX_ERR3 "[93m0123456789ABCDEFabcdef[0m\n"
+# define HEX_ERR4 "Use any of these characters [31m1 - 16 times.[0m\n"
+# define HEX_ERR5 "Enter a [92mnew hex key[0m: "
+# define HEX_ERROR HEX_ERR1 HEX_ERR2 HEX_ERR3 HEX_ERR4 HEX_ERR5
+
+/*
+**	Password Errors
+*/
+
+# define PASSWORD_ERR1 "[32mA password is required ( < 32 chars).[0m\n"
+# define PASSWORD_ERR2 "Enter a [92mnew password[0m: "
+# define PASSWORD_ERROR PASSWORD_ERR1 PASSWORD_ERR2
+
+/*
+**	Salt Errors
+*/
+
+# define SALT_ERR1 "[32mA salt is required ( 16 HEX chars).[0m\n"
+# define SALT_ERR2 "Enter a [92mnew salt[0m: "
+# define SALT_ERROR SALT_ERR1 SALT_ERR2
 
 /*
 **	Auxiliary functions

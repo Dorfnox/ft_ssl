@@ -14,22 +14,20 @@
 
 unsigned int	handle_des_flags(t_ssl *ssl, char **av)
 {
-	ssl->flag_queue = initq();
-	enqueue(ssl->flag_queue, d_flag);
-	enqueue(ssl->flag_queue, e_flag);
-	enqueue(ssl->flag_queue, i_flag);
-	enqueue(ssl->flag_queue, o_flag);
-	enqueue(ssl->flag_queue, k_flag);
+	add_flag(&ssl->flag_queue, "-d", d_flag);
+	add_flag(&ssl->flag_queue, "-e", e_flag);
+	add_flag(&ssl->flag_queue, "-i", i_flag);
+	add_flag(&ssl->flag_queue, "-o", o_flag);
+	add_flag(&ssl->flag_queue, "-k", key_flag);
+	add_flag(&ssl->flag_queue, "-p", password_flag);
+	add_flag(&ssl->flag_queue, "-s", salt_flag);
 	if (!flag_handler(ssl, &av))
 	{
 		if (!ssl->flag_error)
 			ssl->flag_error = FLAG_ERR2(*av);
 		return (0);
 	}
-	if (!(consolidate_des_flags(ssl)))
-		return (0);
-	clean_flag_queue(ssl);
-	return (1);
+	return (consolidate_des_flags(ssl));
 }
 
 /*
@@ -40,7 +38,11 @@ unsigned int	handle_des_flags(t_ssl *ssl, char **av)
 unsigned int	consolidate_des_flags(t_ssl *ssl)
 {
 	ssl->f.e = !ssl->f.d ? 1 : 0;
-	if (!ssl->f.k)
-		ssl->flag_error = ft_str256(2, ft_str256(0), ERROR_HEX1);
+	if (!ssl->f.k && !ssl->f.p)
+	{
+		ssl->user_password = get_password_from_user(" ");
+	}
+	if (!ssl->f.s)
+	DB(ssl->user_password);
 	return (ssl->flag_error ? 0 : 1);
 }

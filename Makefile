@@ -19,9 +19,12 @@ FILES = main \
 		flags_p_q_r_s \
 		flags_d_e_i_o \
 		flags_k \
+		flags_p \
+		flags_s \
 		input \
 		output \
 		endian \
+		pbkdf \
 		execute_message_digest \
 			md5_flags 	  md5_init     md5_execute \
 			sha256_flags  sha256_init  sha256_execute  sha256_execute2 \

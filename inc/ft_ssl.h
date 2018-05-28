@@ -31,23 +31,16 @@ void					clean_up(t_ssl *ssl);
 **	----------------------------------------------------------------------------
 */
 
-unsigned int			handle_command(
-							t_ssl *ssl, char **av);
-unsigned int			handle_command_2(
-							t_ssl *ssl, char **av);
+unsigned int			handle_command(t_ssl *ssl, char **av);
+unsigned int			handle_command_2(t_ssl *ssl, char **av);
 void					init_command_settings(
-							t_ssl *ssl, char *sn, char *ln, char *valid_flags);
-unsigned int			collect_given_parameter(
-							char ***save, char *param);
+							t_ssl *s, char *l, char *b, char *v);
+unsigned int			collect_given_parameter(char ***save, char *param);
 
-unsigned int			flag_handler(
-							t_ssl *ssl, char ***av);
-void					*search_flag_queue(
-							t_node *n, char *flag);
-void					*search_for_flag(
-							t_node *n, unsigned int (*f)(t_ssl *, char ***));
-void					clean_flag_queue(
-							t_ssl *ssl);
+void					add_flag(t_queue **q, char *flag, void *flag_func);
+unsigned int			flag_handler(t_ssl *ssl, char ***av);
+void					*search_flag_queue(t_node *n, char *flag);
+void					clean_flag_queue(t_queue **q);
 
 /*
 **	General flags in flags_*.c
@@ -63,9 +56,16 @@ unsigned int			e_flag(t_ssl *ssl, char ***av);
 unsigned int			i_flag(t_ssl *ssl, char ***av);
 unsigned int			o_flag(t_ssl *ssl, char ***av);
 
-unsigned int			k_flag(t_ssl *ssl, char ***av);
+unsigned int			key_flag(t_ssl *ssl, char ***av);
 char					*get_key_from_user(char *given_key);
-int						does_not_contain_hex_characters_or_is_null(char *key);
+int						key_is_valid(char *key);
+
+unsigned int			password_flag(t_ssl *ssl, char ***av);
+char					*get_password_from_user(char *given_password);
+
+unsigned int			salt_flag(t_ssl *ssl, char ***av);
+char					*get_salt_from_user(char *given_salt);
+int						salt_is_valid(char *salt);
 
 /*
 **	Specific flag handling for each different encryption type
@@ -82,8 +82,6 @@ unsigned int			consolidate_base64_flags(t_ssl *ssl);
 
 unsigned int			handle_des_flags(t_ssl *ssl, char **av);
 unsigned int			consolidate_des_flags(t_ssl *ssl);
-
-
 
 /*
 **	Input handling
@@ -111,6 +109,15 @@ void					output_to_file_or_stdout(t_ssl *s, char *i, char *o);
 
 uint32_t				swap_endian32(uint32_t a);
 uint64_t				swap_endian64(uint64_t a);
+
+/*
+**	Password-Based Key Derivation Functionality (PBKDF2)
+**	----------------------------------------------------------------------------
+*/
+
+void					initialize_pbkdf(t_ssl *ssl, t_pbkdf *pbkdf);
+void					pbkdf(t_pbkdf *p, t_ssl *ssl);
+char					*get_random_salt(ssize_t salt_size);
 
 /*
 **	Crypto execution

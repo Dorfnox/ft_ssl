@@ -26,6 +26,7 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	size_t		len;
 
 	init_des(&des);
+	initialize_pbkdf(ssl, &des.pbkdf);
 	initialize_des_keys(&des, ssl->user_key);
 	if (!(output = ft_strnew(ssl->input_len +
 		(!(ssl->input_len % 8) ? 0 : 8 - (ssl->input_len % 8)))))
@@ -33,7 +34,7 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	len = 0;
 	while (len < ssl->input_len)
 	{
-		message = create_message_block(&input);
+		message = str_to_64bit(NULL, &input);
 		message = 0x0123456789abcdef; // REMOVE - this is for testing
 		DB("Message");
 		printbits_little_endian(&message, 8);
@@ -45,26 +46,6 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	}
 	clean_des_ecb(&des);
 	return (output);
-}
-
-/*
-**	Creates the uint64_t message from 64 bits of the input,
-**	then moves the input pointer for next cycle;
-*/
-
-uint64_t	create_message_block(char **input)
-{
-	int			i;
-	uint64_t	message;
-
-	i = -1;
-	message = 0;
-	while (**input && ++i < 8)
-	{
-		message |= ((uint64_t)(**input) << (56 - (i * 8)));
-		++(*input);
-	}
-	return (message);
 }
 
 /*

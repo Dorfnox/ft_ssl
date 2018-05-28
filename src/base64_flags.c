@@ -14,11 +14,10 @@
 
 unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 {
-	ssl->flag_queue = initq();
-	enqueue(ssl->flag_queue, d_flag);
-	enqueue(ssl->flag_queue, e_flag);
-	enqueue(ssl->flag_queue, i_flag);
-	enqueue(ssl->flag_queue, o_flag);
+	add_flag(&ssl->flag_queue, "-d", d_flag);
+	add_flag(&ssl->flag_queue, "-e", e_flag);
+	add_flag(&ssl->flag_queue, "-i", i_flag);
+	add_flag(&ssl->flag_queue, "-o", o_flag);
 	if (!flag_handler(ssl, &av))
 	{
 		if (!ssl->flag_error)
@@ -27,7 +26,6 @@ unsigned int	handle_base64_flags(t_ssl *ssl, char **av)
 	}
 	if (!(consolidate_base64_flags(ssl)))
 		return (0);
-	clean_flag_queue(ssl);
 	return (1);
 }
 

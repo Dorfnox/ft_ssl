@@ -20,6 +20,12 @@ enum					e_output_type
 	FILENAME_OUTPUT
 };
 
+typedef struct			s_flag_queue
+{
+	char				*flag;
+	void				*flag_func;
+}						t_flag_queue;
+
 typedef struct			s_flags
 {
 	unsigned int		p:1;
@@ -40,6 +46,8 @@ typedef struct			s_ft_ssl
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
 	char				*user_key;
+	char				*user_password;
+	char				*user_salt;
 	struct s_flags		f;
 	t_queue				*flag_queue;
 	char				*flag_error;
@@ -68,6 +76,14 @@ typedef union			u_64u
 	uint16_t			p16[4];
 	uint8_t				p8[8];
 }						t_64bitunion;
+
+typedef struct			s_pbkdf
+{
+	char				*(*algo)(t_ssl *, char *);
+	char				*password;
+	char				*salt;
+	size_t				salt_size;
+}						t_pbkdf;
 
 /*
 **	Message Digest Structs
@@ -140,6 +156,7 @@ typedef struct			s_base64
 
 typedef struct			s_des
 {
+	t_pbkdf				pbkdf;
 	uint64_t			key;
 	uint64_t			key_pc1;
 	uint32_t			l[16];

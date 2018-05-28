@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/23 13:49:57 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/27 15:02:12 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ FILES = bzero memalloc memccpy memchr memcmp memcpy memdel memmove memset \
 		strreplace cursor cursormore \
 		str256 \
 		stack queue \
-		getfilecontents printbits
+		getfilecontents printbits hex_stuff
 
 NUM_FILES = $(words $(FILES))
 

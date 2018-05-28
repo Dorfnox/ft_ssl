@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 16:42:26 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/15 17:36:04 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/26 13:24:41 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void		*dequeue(t_queue *q)
 
 void		*peekq(t_queue *q)
 {
-	return (q->first ? q->first->content : NULL);
+	return (q && q->first ? q->first->content : NULL);
 }
 
 int			isemptyq(t_queue *q)
 {
-	return (q->first ? 0 : 1);
+	return (q && q->first ? 0 : 1);
 }
