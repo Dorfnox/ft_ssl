@@ -115,9 +115,7 @@ uint64_t				swap_endian64(uint64_t a);
 **	----------------------------------------------------------------------------
 */
 
-void					initialize_pbkdf(t_ssl *ssl, t_pbkdf *pbkdf);
-void					pbkdf(t_pbkdf *p, t_ssl *ssl);
-char					*get_random_salt(ssize_t salt_size);
+char					*pbkdf(t_ssl *ssl);
 
 /*
 **	Crypto execution
@@ -201,10 +199,10 @@ uint64_t				key_string_to_hex(char *hex_string);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
 
 char					*execute_des_ecb(t_ssl *ssl, char *input);
-uint64_t				create_message_block(char **input);
+char					*create_output(t_ssl *ssl);
 uint64_t				process_des_ecb(t_des *des, uint64_t message);
 uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
-void					clean_des_ecb(t_des *des);
+int						clean_des_ecb(t_des *des);
 
 /*
 **	To create new crypto algorithm:

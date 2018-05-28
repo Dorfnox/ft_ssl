@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/27 18:54:56 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/27 19:03:38 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void				printbits_big_endian(void *array, size_t size);
 
 char				*convert_string_to_hex_string(char *s);
 char				convert_4_bit_binary_to_hex_char(uint8_t c);
-char				*get_random_hex_string(size_t size);
+char				*random_hex_string(size_t size);
 uint64_t			str_to_64bit(char *s, char **s2);
 
 #endif

@@ -26,11 +26,9 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	size_t		len;
 
 	init_des(&des);
-	initialize_pbkdf(ssl, &des.pbkdf);
 	initialize_des_keys(&des, ssl->user_key);
-	if (!(output = ft_strnew(ssl->input_len +
-		(!(ssl->input_len % 8) ? 0 : 8 - (ssl->input_len % 8)))))
-		return (NULL);
+	if (!(output = create_output(ssl)))
+		return (clean_des_ecb(&des) ? NULL : NULL);
 	len = 0;
 	while (len < ssl->input_len)
 	{
@@ -41,10 +39,27 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 		encryption = process_des_ecb(&des, message);
 		DB("Encrypted Message");
 		printbits_little_endian(&encryption, 8);
-		ft_memcpy(&output[len], &encryption, 8);
+		ft_memcpy(&output[len + PBKDF_SALT_SIZE], &encryption, 8);
 		len += 8;
 	}
 	clean_des_ecb(&des);
+	return (output);
+}
+
+char		*create_output(t_ssl *ssl)
+{
+	char		*output;
+	int			len;
+	uint64_t	salt;
+
+	len = PBKDF_SALT_SIZE + ssl->input_len;
+	len += ((len % 8) ? 0 : (8 - (len % 8)));
+	DBI(len);
+	if (!(output = ft_strnew(len)))
+		return (NULL);
+	salt = str_to_64bit(ssl->user_salt, NULL);
+	ft_memcpy(output, "Salted__", 8);
+	ft_memcpy(&output[8], &salt, 8);
 	return (output);
 }
 
@@ -116,7 +131,7 @@ uint32_t	des_alg(t_des *des, uint32_t block, uint64_t key)
 	return (output);
 }
 
-void		clean_des_ecb(t_des *des)
+int			clean_des_ecb(t_des *des)
 {
 	int		i;
 	int		j;
@@ -135,4 +150,5 @@ void		clean_des_ecb(t_des *des)
 	}
 	free(des->p_table);
 	free(des->inverse_table);
+	return (1);
 }

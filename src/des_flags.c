@@ -37,12 +37,14 @@ unsigned int	handle_des_flags(t_ssl *ssl, char **av)
 
 unsigned int	consolidate_des_flags(t_ssl *ssl)
 {
+	if (ssl->flag_error)
+		return (0);
 	ssl->f.e = !ssl->f.d ? 1 : 0;
 	if (!ssl->f.k && !ssl->f.p)
-	{
 		ssl->user_password = get_password_from_user(" ");
-	}
 	if (!ssl->f.s)
-	DB(ssl->user_password);
-	return (ssl->flag_error ? 0 : 1);
+		ssl->user_salt = random_hex_string(PBKDF_SALT_SIZE);
+	if (!ssl->f.k)
+		ssl->user_key = pbkdf(ssl);
+	return (1);
 }

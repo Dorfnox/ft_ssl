@@ -23,6 +23,7 @@
 # define PBKDF_ALGO execute_sha256
 # define PBKDF_SALT ssl->user_salt
 # define PBKDF_PASSWORD ssl->user_password
+# define PBKDF_PASSWORD_SIZE 32
 
 /*
 **	Commands
@@ -104,7 +105,7 @@
 **	Password Errors
 */
 
-# define PASSWORD_ERR1 "[32mA password is required ( < 32 chars).[0m\n"
+# define PASSWORD_ERR1 "[32mA password is required.[0m\n"
 # define PASSWORD_ERR2 "Enter a [92mnew password[0m: "
 # define PASSWORD_ERROR PASSWORD_ERR1 PASSWORD_ERR2
 

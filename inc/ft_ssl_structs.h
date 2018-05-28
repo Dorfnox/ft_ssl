@@ -81,7 +81,7 @@ typedef struct			s_pbkdf
 {
 	char				*(*algo)(t_ssl *, char *);
 	char				*password;
-	char				*salt;
+	uint64_t			salt;
 	size_t				salt_size;
 }						t_pbkdf;
 
