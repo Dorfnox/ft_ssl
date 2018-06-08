@@ -21,6 +21,7 @@ unsigned int	handle_des_flags(t_ssl *ssl, char **av)
 	add_flag(&ssl->flag_queue, "-k", key_flag);
 	add_flag(&ssl->flag_queue, "-p", password_flag);
 	add_flag(&ssl->flag_queue, "-s", salt_flag);
+	add_flag(&ssl->flag_queue, "-a", base64_flag);
 	if (!flag_handler(ssl, &av))
 	{
 		if (!ssl->flag_error)
@@ -40,11 +41,9 @@ unsigned int	consolidate_des_flags(t_ssl *ssl)
 	if (ssl->flag_error)
 		return (0);
 	ssl->f.e = !ssl->f.d ? 1 : 0;
-	if (!ssl->f.k && !ssl->f.p)
+	if (!ssl->f.p && !ssl->f.k)
 		ssl->user_password = get_password_from_user(" ");
-	if (!ssl->f.s)
+	if (!ssl->f.s && (ssl->user_password))
 		ssl->user_salt = random_hex_string(PBKDF_SALT_SIZE);
-	if (!ssl->f.k)
-		ssl->user_key = pbkdf(ssl);
 	return (1);
 }

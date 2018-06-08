@@ -33,32 +33,31 @@ unsigned int	password_flag(t_ssl *ssl, char ***av)
 }
 
 /*
-**	mallocs a size of 126 to hold salting for later.
+**	mallocs a size to hold both the password and the concatenated salt
 */
 
-char		*get_password_from_user(char *given_password)
+char		*get_password_from_user(char *given_pass)
 {
-	char	*password;
+	char	*pass;
 	char	pass_confirm[PBKDF_PASSWORD_SIZE];
+	int		k;
 
-	password = ft_strnew(PBKDF_PASSWORD_SIZE + PBKDF_SALT_SIZE);
-	if (!(ft_strncpy(password, given_password, PBKDF_PASSWORD_SIZE)))
+	pass = ft_strnew(PBKDF_PASSWORD_SIZE + PBKDF_SALT_SIZE);
+	if (!(ft_strncpy(pass, given_pass, PBKDF_PS)) || (k = 0))
 	{
-		free(password);
+		free(pass);
 		return (NULL);
 	}
-	password[PBKDF_PASSWORD_SIZE] = '\0';
-	while (strlen(ft_strremove(password, " \t\r\n\v\f")) < 1)
+	pass[PBKDF_PASSWORD_SIZE] = '\0';
+	while (ft_strlen(ft_strremove(pass, " \t\r\n\v\f")) < 1 && (k = 1))
 	{
-		ft_bzero(password, PBKDF_PASSWORD_SIZE);
-		readpassphrase(PASSWORD_ERROR,
-			password, PBKDF_PASSWORD_SIZE + 1, RPP_FORCEUPPER);
-		ft_putstr("-------------------------------------------\n");
+		ft_bzero(pass, PBKDF_PS);
+		readpassphrase(PASSWORD_ERROR, pass, PBKDF_PS + 1, RPP_FORCEUPPER);
 	}
-	readpassphrase("Please [92mconfirm your password[0m: ",
-		pass_confirm, PBKDF_PASSWORD_SIZE + 1, RPP_FORCEUPPER);
-	if (!(ft_strequ(pass_confirm, password)))
-		ft_strdel(&password);
-	!password ? write(1, "PASSWORD VERIFICATION FAILED\n", 29) : 0;
-	return (password);
+	k == 1 ? readpassphrase("Please [92mconfirm your password[0m: ",
+		pass_confirm, PBKDF_PS + 1, RPP_FORCEUPPER) : 0;
+	if (k == 1 && !(ft_strequ(pass_confirm, pass)))
+		ft_strdel(&pass);
+	!pass ? write(1, "PASSWORD VERIFICATION FAILED\n", 29) : 0;
+	return (pass);
 }

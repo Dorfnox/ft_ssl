@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp                                               :+:      :+:    :+:   */
+/*   flags_base64.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/03/30 20:57:13 by bpierce          ###   ########.fr       */
+/*   Created: 2018/05/22 15:44:40 by bpierce           #+#    #+#             */
+/*   Updated: 2018/05/31 13:22:18 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-/*
-**	executes message digest functions
-*/
-
-void		execute_cipher(t_ssl *ssl)
+unsigned int	base64_flag(t_ssl *ssl, char ***av)
 {
-	char	*input;
-	char	*output;
-
-	input = ssl->f.i ? input_from_file(ssl) : input_from_stdin(ssl);
-	if (!input)
-		return ;
-	output = ssl->enc_func(ssl, input, ssl->input_len);
-	output_to_file_or_stdout(ssl, input, output);
-	free(input);
-	free(output);
-	ft_strdel(&ssl->user_key);
+	(void)av;
+	if (ssl->f.a && (ssl->flag_error = FLAG_ERR4("-a")))
+		return (0);
+	return ((ssl->f.a = 1));
 }

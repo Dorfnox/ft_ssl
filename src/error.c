@@ -27,3 +27,9 @@ void	clean_up(t_ssl *ssl)
 {
 	free(ssl->given_strings);
 }
+
+void	malloc_error(char *message)
+{
+	message ? ft_pflite("ft_ssl: Malloc Eror: %s\n", message) : 0;
+	exit(1);
+}

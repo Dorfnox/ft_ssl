@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp                                               :+:      :+:    :+:   */
+/*   ft_varrayrev.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/03/30 20:57:13 by bpierce          ###   ########.fr       */
+/*   Created: 2017/09/16 19:08:09 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/07 20:06:21 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl.h"
+#include "libft.h"
 
 /*
-**	executes message digest functions
+** Reverses the given array of pointers
 */
 
-void		execute_cipher(t_ssl *ssl)
+void	ft_varrayrev(void **array, int size_of_array)
 {
-	char	*input;
-	char	*output;
+	int		beg;
+	void	*tmp;
 
-	input = ssl->f.i ? input_from_file(ssl) : input_from_stdin(ssl);
-	if (!input)
+	if (!array || !(*array) || size_of_array < 2)
 		return ;
-	output = ssl->enc_func(ssl, input, ssl->input_len);
-	output_to_file_or_stdout(ssl, input, output);
-	free(input);
-	free(output);
-	ft_strdel(&ssl->user_key);
+	beg = 0;
+	--size_of_array;
+	while (beg < size_of_array)
+	{
+		tmp = array[beg];
+		array[beg] = array[size_of_array];
+		array[size_of_array] = tmp;
+		++beg;
+		--size_of_array;
+	}
 }

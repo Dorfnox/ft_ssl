@@ -16,19 +16,22 @@
 **	The main loop for handling base64
 */
 
-char		*execute_base64(t_ssl *ssl, char *input)
+char		*execute_base64(t_ssl *ssl, char *input, size_t input_len)
 {
-	return (ssl->f.e ? base64_encrypt(ssl, input) : base64_decrypt(ssl, input));
+	(void)ssl;
+	if (ssl->f.e)
+		return (base64_encrypt(input, input_len));
+	return (base64_decrypt(input, input_len));
 }
 
-char		*base64_encrypt(t_ssl *ssl, char *input)
+char		*base64_encrypt(char *input, size_t input_len)
 {
 	t_base64	b;
 	char		*t;
 	char		*output;
 
 	t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	b.input_len = (int)ssl->input_len;
+	b.input_len = (int)input_len;
 	b.output_len = 4 * ((b.input_len + 2) / 3);
 	if (!(output = ft_strnew(b.output_len)))
 		return (NULL);
@@ -64,13 +67,13 @@ int			*get_decrypt_table(char *input, int input_len, int *output_len)
 	return (table);
 }
 
-char		*base64_decrypt(t_ssl *ssl, char *input)
+char		*base64_decrypt(char *input, size_t input_len)
 {
 	t_base64	b;
 	char		*output;
 	int			*t;
 
-	b.input_len = (int)ssl->input_len;
+	b.input_len = (int)input_len;
 	if (!(t = get_decrypt_table(input, b.input_len, &b.output_len)))
 		return (NULL);
 	if (!(output = ft_strnew(b.output_len)))
@@ -87,7 +90,5 @@ char		*base64_decrypt(t_ssl *ssl, char *input)
 		while (++b.k < 3 && ++b.j < b.output_len)
 			output[b.j] = (char)((b.res_e >> (16 - (8 * b.k))) & 0xFF);
 	}
-	if (output[4] == '\n')
-		DB("YES");
 	return (output);
 }

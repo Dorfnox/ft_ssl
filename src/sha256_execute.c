@@ -17,18 +17,19 @@
 **	Built for use on a system that uses LITTLE ENDIAN.
 */
 
-char	*execute_sha256(t_ssl *ssl, char *input)
+char	*execute_sha256(t_ssl *ssl, char *input, size_t input_len)
 {
 	t_sha256	sha;
 	size_t		i;
 	size_t		k;
 	size_t		number_of_chunks;
 
+	(void)ssl;
 	init_sha256(&sha);
-	append_bits_sha256(ssl, &sha, input);
+	append_bits_sha256(&sha, input, &input_len);
 	i = -1;
 	k = 0;
-	number_of_chunks = ssl->input_len * 8 / 512;
+	number_of_chunks = input_len * 8 / 512;
 	while (++i < number_of_chunks)
 	{
 		init_words(&sha, &k);

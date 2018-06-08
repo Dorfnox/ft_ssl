@@ -45,9 +45,10 @@ typedef struct			s_ft_ssl
 	char				*cmd_name_lower;
 	char				*cmd_name_upper;
 	char				*cmd_valid_flags;
-	char				*user_key;
 	char				*user_password;
 	char				*user_salt;
+	char				*user_key;
+	char				*iv;
 	struct s_flags		f;
 	t_queue				*flag_queue;
 	char				*flag_error;
@@ -59,7 +60,7 @@ typedef struct			s_ft_ssl
 	size_t				input_len;
 	void				(*execute_func)(struct s_ft_ssl *);
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
-	char				*(*enc_func)(struct s_ft_ssl *, char *);
+	char				*(*enc_func)(struct s_ft_ssl *, char *, size_t);
 }						t_ssl;
 
 typedef union			u_32u
@@ -77,12 +78,20 @@ typedef union			u_64u
 	uint8_t				p8[8];
 }						t_64bitunion;
 
+/*
+**	Password-Based Key Derivation Function (PBKDF2)
+*/
+
 typedef struct			s_pbkdf
 {
-	char				*(*algo)(t_ssl *, char *);
+	char				*key;
+	char				*iv;
 	char				*password;
+	size_t				pass_len;
 	uint64_t			salt;
-	size_t				salt_size;
+	size_t				salt_len;
+	size_t				num_of_iterations;
+	char				*(*algo)(t_ssl *, char *, size_t);
 }						t_pbkdf;
 
 /*
@@ -156,7 +165,6 @@ typedef struct			s_base64
 
 typedef struct			s_des
 {
-	t_pbkdf				pbkdf;
 	uint64_t			key;
 	uint64_t			key_pc1;
 	uint32_t			l[16];

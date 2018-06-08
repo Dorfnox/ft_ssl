@@ -17,7 +17,7 @@
 **	REQUIRES a '\0' char string as input;
 */
 
-char		*execute_des_ecb(t_ssl *ssl, char *input)
+char		*execute_des_ecb(t_ssl *ssl, char *input, size_t input_len)
 {
 	t_des		des;
 	uint64_t	message;
@@ -26,11 +26,11 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	size_t		len;
 
 	init_des(&des);
-	initialize_des_keys(&des, ssl->user_key);
-	if (!(output = create_output(ssl)))
-		return (clean_des_ecb(&des) ? NULL : NULL);
+	init_des_key(ssl, &des);
+	init_des_subkeys(&des, ssl->f.d);
+	output = create_des_output(ssl, input_len);
 	len = 0;
-	while (len < ssl->input_len)
+	while (len < input_len)
 	{
 		message = str_to_64bit(NULL, &input);
 		message = 0x0123456789abcdef; // REMOVE - this is for testing
@@ -39,6 +39,7 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 		encryption = process_des_ecb(&des, message);
 		DB("Encrypted Message");
 		printbits_little_endian(&encryption, 8);
+		ft_printf("%X\n", encryption);
 		ft_memcpy(&output[len + PBKDF_SALT_SIZE], &encryption, 8);
 		len += 8;
 	}
@@ -46,18 +47,16 @@ char		*execute_des_ecb(t_ssl *ssl, char *input)
 	return (output);
 }
 
-char		*create_output(t_ssl *ssl)
+char		*create_des_output(t_ssl *ssl, size_t input_len)
 {
 	char		*output;
 	int			len;
 	uint64_t	salt;
 
-	len = PBKDF_SALT_SIZE + ssl->input_len;
+	len = PBKDF_SALT_SIZE + input_len;
 	len += ((len % 8) ? 0 : (8 - (len % 8)));
-	DBI(len);
-	if (!(output = ft_strnew(len)))
-		return (NULL);
-	salt = str_to_64bit(ssl->user_salt, NULL);
+	!(output = ft_strnew(len)) ? malloc_error("Creating des output") : 0;
+	salt = hex_str_to_64bit_le(ssl->user_salt);
 	ft_memcpy(output, "Salted__", 8);
 	ft_memcpy(&output[8], &salt, 8);
 	return (output);

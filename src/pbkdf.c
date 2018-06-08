@@ -6,26 +6,44 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/26 16:17:28 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/26 16:31:17 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/07 19:29:11 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
 /*
-**	Returns a key using the password, salt, and stuffs.
+**	Sets the key and iv (inside pbkdf) using the given password and salt.
+**	Uses p->pass_salt as the new hashed buffer.
+**	Actual openssl uses an MD5 hash with a pass of 1 Iteration!!!
+**	Then it cuts the first 16 characters to be the key,
+**	and the second 16 characters to be the iv.
+**	That behaviour is mimicked here. 
 */
 
-char		*pbkdf(t_ssl *ssl)
+void	pbkdf2(t_pbkdf *p)
 {
-	char	*(*algo)(t_ssl *ssl, char *input);
-	t_pbkdf p;
-	int		pass_len;
+	char	*output;
+	size_t	i;
+	char	*input;
+	int		input_len;
 
-	p.algo = PBKDF_ALGO;
-	p.salt = str_to_64bit(ssl->user_salt, NULL);
-	p.salt_size = PBKDF_SALT_SIZE;
-	pass_len = ft_strlen(ssl->user_password);
-	(void)algo;
-	return (NULL);
+	input_len = p->pass_len + p->salt_len;
+	!(input = ft_strnew(input_len)) ? malloc_error("pbkdf2 input") : 0;
+	ft_memcpy(input, p->password, p->pass_len);
+	ft_memcpy(&input[p->pass_len], &p->salt, p->salt_len);
+	i = -1;
+	while (++i < p->num_of_iterations)
+	{
+		output = p->algo(NULL, input, input_len);
+		input_len = ft_strlen(output);
+		free(input);
+		input = output;
+	}
+	p->key = ft_strndup(output, input_len / 2);
+	p->iv = ft_strndup(&output[input_len / 2], input_len / 2);
+	(!p->key || !p->iv) ? malloc_error("Failed to duplicate the key or iv") : 0;
+	ft_strtoupper(&p->key);
+	ft_strtoupper(&p->iv);
+	free(output);
 }

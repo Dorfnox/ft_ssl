@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp                                               :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/03/30 20:57:13 by bpierce          ###   ########.fr       */
+/*   Created: 2018/06/07 18:53:38 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/07 19:00:49 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl.h"
+#include "libft.h"
 
-/*
-**	executes message digest functions
-*/
-
-void		execute_cipher(t_ssl *ssl)
+char	*ft_strndup(const char *src, size_t n)
 {
-	char	*input;
+	size_t	i;
 	char	*output;
 
-	input = ssl->f.i ? input_from_file(ssl) : input_from_stdin(ssl);
-	if (!input)
-		return ;
-	output = ssl->enc_func(ssl, input, ssl->input_len);
-	output_to_file_or_stdout(ssl, input, output);
-	free(input);
-	free(output);
-	ft_strdel(&ssl->user_key);
+	if (!src || !n)
+		return (NULL);
+	if (!(output = malloc(sizeof(char) * (n + 1))))
+		return (NULL);
+	i = 0;
+	while (i < n && src[i])
+	{
+		output[i] = src[i];
+		++i;
+	}
+	while (i < n)
+		output[i++] = 0;
+	output[n] = 0;
+	return (output);
 }

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/27 19:03:38 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/07 20:06:29 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void				*ft_memchr(const void *s, int c, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 size_t				ft_strlen(const char *s);
 char				*ft_strdup(const char *s1);
+char				*ft_strndup(const char *s1, size_t n);
 char				*ft_strdupuntil(const char *s, const char c);
 char				*ft_strdupfrom(const char *s, const char c);
 char				*ft_strcpy(char *dest, const char *src);
@@ -156,6 +157,7 @@ char				***ft_arraynew4d(int width, int height, int depth);
 int					ft_arraylen(void **array);
 char				**ft_arraydel(char ***array);
 void				ft_varraydel(void ***a, int i);
+void				ft_varrayrev(void **a, int i);
 char				**ft_arraydup(char **old);
 int					ft_arrayprint(char **a);
 unsigned int		ft_arrayappend(char ***save, char *param);
@@ -220,8 +222,11 @@ void				printbits_little_endian(void *array, size_t size);
 void				printbits_big_endian(void *array, size_t size);
 
 char				*convert_string_to_hex_string(char *s);
-char				convert_4_bit_binary_to_hex_char(uint8_t c);
+char				convert_hex_char_to_4bit(uint8_t c);
 char				*random_hex_string(size_t size);
 uint64_t			str_to_64bit(char *s, char **s2);
+
+uint64_t			hex_str_to_64bit_be(char *s);
+uint64_t			hex_str_to_64bit_le(char *s);
 
 #endif

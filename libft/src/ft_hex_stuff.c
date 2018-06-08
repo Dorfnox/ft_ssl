@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/27 14:52:10 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/27 19:02:12 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/28 13:16:50 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,18 @@ char		*convert_string_to_hex_string(char *s)
 }
 
 /*
-** Converts the 4-bit (ex: 1010) to it's equivalent char (ex: 'A')
+** Converts the hex char (ex: 'A') to it's 4-bit (ex: 1010) equivalent
 */
 
-char		convert_4_bit_binary_to_hex_char(uint8_t c)
+char		convert_hex_char_to_4bit(uint8_t c)
 {
-	char	*hex_chars;
-
-	hex_chars = "0123456789ABCDEF";
-	return (c < 16 ? hex_chars[c] : 0);
+	if (c > 47 && c < 58)
+		return (c - 48);
+	else if (c > 64 && c < 71)
+		return (c - 55);
+	else if (c > 96 && c < 103)
+		return (c - 97);
+	return (0);
 }
 
 /*
@@ -110,3 +113,4 @@ uint64_t	str_to_64bit(char *s, char **s2)
 		*s2 = s;
 	return (message);
 }
+

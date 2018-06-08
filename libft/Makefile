@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/27 15:02:12 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/07 18:59:49 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,14 +19,15 @@ FILES = bzero memalloc memccpy memchr memcmp memcpy memdel memmove memset \
 		putchar putchars putchar_fd putendl putendl_fd putnbr putnbr_fd \
 		putstr putstr_fd puterror putnull \
 		strcat strccount strccountto strchr strclr strcmp strcpy strctrim \
-		strdel strdeltwo strdelthree strdelfour strdup strdupuntil strdupfrom \
+		strdel strdeltwo strdelthree strdelfour strdup strndup strdupuntil \
+		strdupfrom \
 		strequ strfindnreplace strfsub strfremalloc strfresize striter \
 		striteri strjoin strfjoin strffjoin strremove strfremove \
 		strlcat strlen \
 		strmap strmapi strncat strncmp strncpy strnequ strnew strnstr strrchr \
 		strrev strsplit strsplits strstr strsub strtrim strofchars \
 		arraynew arraynew4d arraylen arraydel arraydup arrayprint arrayappend \
-		varraynew varraydel \
+		varraynew varraydel varrayrev \
 		lstadd lstdel lstdelone lstiter lstmap lstnew \
 		isalnum isalpha isascii isdigit islower isprint isupper iswhitespace \
 		isstrdigits isstrprints \
@@ -47,7 +48,7 @@ FILES = bzero memalloc memccpy memchr memcmp memcpy memdel memmove memset \
 		strreplace cursor cursormore \
 		str256 \
 		stack queue \
-		getfilecontents printbits hex_stuff
+		getfilecontents printbits hex_stuff hex_stuff2
 
 NUM_FILES = $(words $(FILES))
 

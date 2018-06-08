@@ -12,22 +12,22 @@
 
 #include "ft_ssl.h"
 
-void	append_bits_sha256(t_ssl *ssl, t_sha256 *sha, char *input)
+void	append_bits_sha256(t_sha256 *sha, char *input, size_t *len)
 {
 	uint64_t	num_of_bits;
 	uint64_t	zero_bits;
 
-	num_of_bits = ssl->input_len * 8;
+	num_of_bits = (*len) * 8;
 	zero_bits = 0;
 	while ((num_of_bits + 1 + zero_bits + 64) % 512)
 		zero_bits++;
-	sha->data = ft_memalloc(ssl->input_len + 1 + (zero_bits / 8) + 8);
-	ft_memcpy(sha->data, input, ssl->input_len);
-	sha->data[ssl->input_len] = 128;
+	sha->data = ft_memalloc((*len) + 1 + (zero_bits / 8) + 8);
+	ft_memcpy(sha->data, input, (*len));
+	sha->data[(*len)] = 128;
 	num_of_bits = swap_endian64(num_of_bits);
-	ft_memcpy(sha->data + ssl->input_len + (zero_bits / 8) + 1,
+	ft_memcpy(sha->data + (*len) + (zero_bits / 8) + 1,
 				&num_of_bits, 8);
-	ssl->input_len += (1 + (zero_bits / 8) + 8);
+	(*len) += (1 + (zero_bits / 8) + 8);
 }
 
 char	*build_sha256_output(t_sha256 *sha)

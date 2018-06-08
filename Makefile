@@ -21,6 +21,7 @@ FILES = main \
 		flags_k \
 		flags_p \
 		flags_s \
+		flags_base64 \
 		input \
 		output \
 		endian \

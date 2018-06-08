@@ -19,12 +19,6 @@
 
 # define USAGE "usage: ft_ssl command [command opts] [command args]\n"
 
-# define PBKDF_SALT_SIZE 16
-# define PBKDF_ALGO execute_sha256
-# define PBKDF_SALT ssl->user_salt
-# define PBKDF_PASSWORD ssl->user_password
-# define PBKDF_PASSWORD_SIZE 32
-
 /*
 **	Commands
 **	----------------------------------------------------------------------------
@@ -118,9 +112,23 @@
 # define SALT_ERROR SALT_ERR1 SALT_ERR2
 
 /*
-**	Auxiliary functions
+**	Auxiliary functions / declarations
 **	----------------------------------------------------------------------------
 */
+
+/*
+**	Password-Based Key Derivation Function (PBKDF) Declarations
+*/
+
+# define PBKDF_SALT_SIZE 16
+# define PBKDF_ALGO execute_md5
+# define PBKDF_ALGO_OUTPUT_LEN 32
+# define PBKDF_SALT ssl->user_salt
+# define PBKDF_PASSWORD ssl->user_password
+# define PBKDF_PASSWORD_SIZE 32
+# define PBKDF_PS PBKDF_PASSWORD_SIZE
+# define PBKDF_ITERATIONS 1
+# define PBKDF_KEY_LEN 16
 
 /*
 **	Super Helpful Functions

@@ -20,19 +20,19 @@ unsigned int	handle_command(t_ssl *ssl, char **av)
 {
 	if (SE_("md5", *av) && (ssl->execute_func = execute_message_digest))
 	{
-		init_command_settings(ssl, "md5", "MD5", VALID_MD5_FLAGS);
+		init_settings(ssl, "md5", "MD5", VALID_MD5_FLAGS);
 		ssl->handle_flags = handle_md5_flags;
 		ssl->enc_func = execute_md5;
 	}
 	else if (SE_("sha256", *av) && (ssl->execute_func = execute_message_digest))
 	{
-		init_command_settings(ssl, "sha256", "SHA256", VALID_SHA256_FLAGS);
+		init_settings(ssl, "sha256", "SHA256", VALID_SHA256_FLAGS);
 		ssl->handle_flags = handle_sha256_flags;
 		ssl->enc_func = execute_sha256;
 	}
 	else if (SE_("sha224", *av) && (ssl->execute_func = execute_message_digest))
 	{
-		init_command_settings(ssl, "sha224", "SHA224", VALID_SHA224_FLAGS);
+		init_settings(ssl, "sha224", "SHA224", VALID_SHA224_FLAGS);
 		ssl->handle_flags = handle_sha256_flags;
 		ssl->enc_func = execute_sha224;
 	}
@@ -43,13 +43,13 @@ unsigned int	handle_command_2(t_ssl *ssl, char **av)
 {
 	if (SE_("base64", *av) && (ssl->execute_func = execute_cipher))
 	{
-		init_command_settings(ssl, "base64", "BASE64", VALID_BASE64_FLAGS);
+		init_settings(ssl, "base64", "BASE64", VALID_BASE64_FLAGS);
 		ssl->handle_flags = handle_base64_flags;
 		ssl->enc_func = execute_base64;
 	}
 	else if (SE_("des-ecb", *av) && (ssl->execute_func = execute_cipher))
 	{
-		init_command_settings(ssl, "des-ecb", "DES-ECB", VALID_DES_FLAGS);
+		init_settings(ssl, "des-ecb", "DES-ECB", VALID_DES_FLAGS);
 		ssl->handle_flags = handle_des_flags;
 		ssl->enc_func = execute_des_ecb;
 	}
@@ -58,8 +58,7 @@ unsigned int	handle_command_2(t_ssl *ssl, char **av)
 	return (ssl->execute_func ? 1 : 0);
 }
 
-void			init_command_settings(
-					t_ssl *ssl, char *sn, char *ln, char *valid_flags)
+void			init_settings(t_ssl *ssl, char *sn, char *ln, char *valid_flags)
 {
 	static char	command_lowercase[MAX_COMMAND_SIZE];
 	static char	command_uppercase[MAX_COMMAND_SIZE];

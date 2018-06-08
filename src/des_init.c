@@ -36,22 +36,49 @@ void		init_des(t_des *des)
 }
 
 /*
-**	Builds the user's key, as well as 16 subkeys
+**	If no user key was provided,
+**	creates PBKDF parameters and calls pbkdf using the parameters.
+**	The iv is not used, but is still saved here.
 */
 
-void		initialize_des_keys(t_des *des, char *user_key)
+void		init_des_key(t_ssl *ssl, t_des *des)
 {
+	t_pbkdf		p;
 	int			i;
-	uint64_t	buff;
+	char		buff;
 
+	if (!ssl->user_key)
+	{
+		p.password = ssl->user_password;
+		p.pass_len = ft_strlen(ssl->user_password);
+		p.salt = hex_str_to_64bit_le(ssl->user_salt);
+		p.salt_len = PBKDF_SALT_SIZE / 2;
+		p.num_of_iterations = PBKDF_ITERATIONS;
+		p.algo = PBKDF_ALGO;
+		pbkdf2(&p);
+		ssl->user_key = p.key;
+		ssl->iv = p.iv;
+	}
 	i = -1;
 	des->key = 0;
-	while ((buff = user_key[++i]))
+	while ((buff = ssl->user_key[++i]))
 	{
 		buff -= buff  > 47 && buff < 58 ? 48 : 0;
 		buff -= buff  > 64 && buff < 71 ? 55 : 0;
 		des->key |= (buff & 0xF) << (60 - (i * 4));
 	}
+}
+
+/*
+**	Builds the 16 subkeys.
+**	If the reverse flag is on, ft_varrayrev will reverse the keys.
+*/
+
+void		init_des_subkeys(t_des *des, uint8_t reverse)
+{
+	int			i;
+	char		buff;
+
 	des->key_pc1 = permutated_choice(des->key, des->pc1, 56);
 	des->l[0] = LEFT_ROT_28(des->key_pc1 >> 28, des->shifts[0]);
 	des->r[0] = LEFT_ROT_28(des->key_pc1 & 0xFFFFFFF, des->shifts[0]);
@@ -66,6 +93,8 @@ void		initialize_des_keys(t_des *des, char *user_key)
 		buff = ((uint64_t)des->l[i] << 28) | (uint64_t)des->r[i];
 		des->subkey[i] = permutated_choice(buff, des->pc2, 48);
 	}
+	if (reverse)
+		ft_varrayrev((void **)(&des->subkey), 16);
 }
 
 /*

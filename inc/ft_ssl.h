@@ -24,6 +24,7 @@
 */
 
 int						ssl_error(char *name, char *message, int ret_value);
+void					malloc_error(char *message);
 void					clean_up(t_ssl *ssl);
 
 /*
@@ -33,8 +34,7 @@ void					clean_up(t_ssl *ssl);
 
 unsigned int			handle_command(t_ssl *ssl, char **av);
 unsigned int			handle_command_2(t_ssl *ssl, char **av);
-void					init_command_settings(
-							t_ssl *s, char *l, char *b, char *v);
+void					init_settings(t_ssl *s, char *l, char *b, char *v);
 unsigned int			collect_given_parameter(char ***save, char *param);
 
 void					add_flag(t_queue **q, char *flag, void *flag_func);
@@ -66,6 +66,8 @@ char					*get_password_from_user(char *given_password);
 unsigned int			salt_flag(t_ssl *ssl, char ***av);
 char					*get_salt_from_user(char *given_salt);
 int						salt_is_valid(char *salt);
+
+unsigned int			base64_flag(t_ssl *ssl, char ***av);
 
 /*
 **	Specific flag handling for each different encryption type
@@ -115,7 +117,7 @@ uint64_t				swap_endian64(uint64_t a);
 **	----------------------------------------------------------------------------
 */
 
-char					*pbkdf(t_ssl *ssl);
+void					pbkdf2(t_pbkdf *p);
 
 /*
 **	Crypto execution
@@ -144,8 +146,8 @@ void					init_md5_k_table1(t_md5 *md5);
 void					init_md5_k_table2(t_md5 *md5);
 void					init_md5_k_table3(t_md5 *md5);
 
-char					*execute_md5(t_ssl *ssl, char *input);
-void					append_bits_md5(t_ssl *s, t_md5 *m, char *i);
+char					*execute_md5(t_ssl *ssl, char *input, size_t input_len);
+void					append_bits_md5(t_md5 *m, char *in, size_t *input_len);
 void					execute_md5_(t_md5 *md5, int j);
 char					*build_md5_output(t_md5 *md5);
 void					clean_md5(t_md5 *md5);
@@ -159,13 +161,13 @@ void					init_sha256_k_table1(t_sha256 *sha);
 void					init_sha256_k_table2(t_sha256 *sha);
 void					init_sha256_k_table3(t_sha256 *sha);
 
-char					*execute_sha256(t_ssl *ssl, char *input);
+char					*execute_sha256(t_ssl *ssl, char *input, size_t in_len);
 void					init_words(t_sha256 *sha, size_t *k);
 void					init_working_variables(t_sha256 *sha);
 void					perform_algorithm(t_sha256 *sha);
 void					add_to_digest(t_sha256 *sha);
 
-void					append_bits_sha256(t_ssl *s, t_sha256 *sha, char *i);
+void					append_bits_sha256(t_sha256 *s, char *i, size_t *len);
 char					*build_sha256_output(t_sha256 *sha);
 void					clean_sha256(t_sha256 *sha);
 
@@ -174,7 +176,8 @@ void					clean_sha256(t_sha256 *sha);
 */
 
 void					init_sha224(t_sha256 *sha);
-char					*execute_sha224(t_ssl *ssl, char *input);
+
+char					*execute_sha224(t_ssl *ssl, char *input, size_t input_len);
 char					*build_sha224_output(t_sha256 *sha);
 
 /*
@@ -184,9 +187,9 @@ char					*build_sha224_output(t_sha256 *sha);
 **	BASE64
 */
 
-char					*execute_base64(t_ssl *ssl, char *input);
-char					*base64_encrypt(t_ssl *ssl, char *input);
-char					*base64_decrypt(t_ssl *ssl, char *input);
+char					*execute_base64(t_ssl *ssl, char *input, size_t in_len);
+char					*base64_encrypt(char *input, size_t in_len);
+char					*base64_decrypt(char *input, size_t in_len);
 int						*get_decrypt_table(char *input, int i_len, int *o_len);
 
 /*
@@ -194,23 +197,15 @@ int						*get_decrypt_table(char *input, int i_len, int *o_len);
 */
 
 void					init_des(t_des *des);
-void					initialize_des_keys(t_des *des, char *user_key);
+void					init_des_key(t_ssl *ssl, t_des *des);
+void					init_des_subkeys(t_des *des, uint8_t rev);
 uint64_t				key_string_to_hex(char *hex_string);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
 
-char					*execute_des_ecb(t_ssl *ssl, char *input);
-char					*create_output(t_ssl *ssl);
+char					*execute_des_ecb(t_ssl *ssl, char *input, size_t in_len);
+char					*create_des_output(t_ssl *ssl, size_t input_len);
 uint64_t				process_des_ecb(t_des *des, uint64_t message);
 uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
 int						clean_des_ecb(t_des *des);
-
-/*
-**	To create new crypto algorithm:
-**	-------------------------------
-**	1) Add to handle_command in flags.c the initializing for the new algo
-**	2) Create a valid flags macro for that algorithm
-**	3) Add to Message Digest Commands macro the new name
-**	4) Create the handle_flags and execute functions for the algorithm
-*/
 
 #endif

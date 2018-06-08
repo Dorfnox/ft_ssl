@@ -79,7 +79,7 @@ void		execute_general(t_ssl *ssl, char *input, int display_type)
 
 	if (!input)
 		return ;
-	output = ssl->enc_func(ssl, input);
+	output = ssl->enc_func(ssl, input, ssl->input_len);
 	if (display_type == STDIN_OUTPUT)
 		output_stdin(ssl, input, output);
 	else if (display_type == GIVEN_STRING_OUTPUT)
