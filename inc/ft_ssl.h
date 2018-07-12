@@ -199,13 +199,13 @@ int						*get_decrypt_table(char *in, size_t ilen, size_t *olen);
 void					init_des(t_des *des);
 void					init_des_key(t_ssl *ssl, t_des *des);
 void					init_des_subkeys(t_des *des, uint8_t rev);
-uint64_t				key_string_to_hex(char *hex_string);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
+int						clean_des_ecb(t_des *des);
 
 char					*execute_des_ecb(t_ssl *ssl, char *in, t_io_len *l);
+uint64_t				des_ecb_str_to_64bit(char **input);
 char					*create_des_output(t_ssl *s, size_t *iln, size_t *oln);
 uint64_t				process_des_ecb(t_des *des, uint64_t message);
 uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
-int						clean_des_ecb(t_des *des);
 
 #endif

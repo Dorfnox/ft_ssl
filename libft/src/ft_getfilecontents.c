@@ -6,13 +6,13 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 20:15:18 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/24 15:23:26 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/07/11 23:49:46 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	free_contents(int fd, char **contents)
+static size_t	free_contents(int fd, uint8_t **contents)
 {
 	if (fd != -1)
 		close(fd);
@@ -21,7 +21,7 @@ static size_t	free_contents(int fd, char **contents)
 	return (0);
 }
 
-size_t			getfilecontents(char *filename, char **contents)
+size_t			getfilecontents(char *filename, uint8_t **contents)
 {
 	char	buff[1024];
 	int		fd;
@@ -30,10 +30,10 @@ size_t			getfilecontents(char *filename, char **contents)
 
 	if (!filename || !contents)
 		return (0);
-	*contents = NULL;
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		return (free_contents(fd, contents));
-	*contents = ft_strnew(0);
+	if (!(*contents = malloc(1)))
+		return (free_contents(fd, contents));
 	total = 0;
 	while ((ret = read(fd, buff, 1023)))
 	{
@@ -49,14 +49,15 @@ size_t			getfilecontents(char *filename, char **contents)
 	return (total);
 }
 
-size_t			writetofile(char *filename, char *contents, size_t len)
+size_t			writetofile(char *filename, uint8_t *contents, size_t len)
 {
 	int		ret;
 	int		fd;
 
 	if (!filename || !contents)
 		return (0);
-	if ((fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR)) == -1)
+	if ((fd = open(filename, O_TRUNC | O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR))
+			== -1)
 		return (0);
 	ret = write(fd, contents, len);
 	close(fd);

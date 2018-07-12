@@ -117,3 +117,29 @@ uint64_t	permutated_choice(uint64_t key, int *pc, int size)
 		newkey |= (key >> (MAX_64(size + 8) - pc[i]) & 1) << (size - (i + 1));
 	return (newkey);
 }
+
+/*
+**	Frees memory used with des-ecb
+*/
+
+int			clean_des_ecb(t_des *des)
+{
+	int		i;
+	int		j;
+
+	free(des->pc1);
+	free(des->pc2);
+	free(des->shifts);
+	free(des->ip_table);
+	free(des->ebit);
+	i = -1;
+	while (++i < 8)
+	{
+		j = -1;
+		while (++j < 4)
+			free(des->s[i][j]);
+	}
+	free(des->p_table);
+	free(des->inverse_table);
+	return (1);
+}

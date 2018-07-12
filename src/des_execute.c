@@ -29,41 +29,69 @@ char		*execute_des_ecb(t_ssl *ssl, char *input, t_io_len *l)
 	output = create_des_output(ssl, &l->in_len, &l->out_len);
 	while (l->out_len < l->in_len)
 	{
-		message = str_to_64bit(NULL, &input);
-		// message = 0x0123456789abcdef; // REMOVE - this is for testing
-		// DB("Message");
-		// printbits_little_endian(&message, 8);
+		message = des_ecb_str_to_64bit(&input);
+		printbits_little_endian(&message, 8);
 		encryption = process_des_ecb(&des, message);
-		// DB("Encrypted Message");
-		// printbits_little_endian(&encryption, 8);
-		insert_64bit_into_string(&output[l->out_len], encryption); // OPPOSITE
-		// ft_memcpy(&output[l->out_len], &encryption, 8); // OPPOSITE
+		insert_64bit_into_string(&output[l->out_len], encryption);
 		l->out_len += 8;
 	}
-	DBI(l->out_len);
-	// printbits_little_endian(output, 8);
 	clean_des_ecb(&des);
 	return (output);
 }
 
-char		*create_des_output(t_ssl *ssl, size_t *in_len, size_t *o_len)
+/*
+**	Turns the character string into a uint64_t message.
+**	If there are any remaining bits left, the number of remaining bits
+**	required in order to fill the last byte needed are appended to message.
+*/
+
+uint64_t	des_ecb_str_to_64bit(char **input)
+{
+	uint8_t			i;
+	uint64_t	message;
+	uint64_t	remaining;
+
+	i = -1;
+	message = 0;
+	while (++i < 8 && **input)
+	{
+		message |= ((uint64_t)(**input) << (56 - (i * 8)));
+		++(*input);
+	}
+	remaining = 8 - i;
+	while (i < 8)
+	{
+		message |= (remaining << (56 - (i * 8)));
+		++i;
+	}
+	return (message);
+}
+
+/*
+**	Allocates enough space for the:
+**	- Salted__ (8 bytes)
+**	- salt (usually 8 bytes)
+**	- input len
+**	- An extra 8 bytes in case the input length is a modulus of 8
+*/
+
+char		*create_des_output(t_ssl *ssl, size_t *in_len, size_t *out_len)
 {
 	char		*output;
 	int			len;
 	uint64_t	salt;
 
-	len = 8 + (PBKDF_SALT_SIZE / 2) + (*in_len);
-	len += ((len % 8) ? 0 : (8 - (len % 8)));
-	!(output = ft_strnew(len)) ? malloc_error("Creating des output") : 0;
-	*o_len = 0;
+	len = 8 + (PBKDF_SALT_SIZE / 2) + (*in_len) + 8;
+	MAL_ERR((output = ft_strnew(len)), "Creating des output");
+	*out_len = 0;
 	if (ssl->user_password)
 	{
 		salt = hex_str_to_64bit_le(ssl->user_salt);
 		ft_memcpy(output, "Salted__", 8);
 		ft_memcpy(&output[8], &salt, PBKDF_SALT_SIZE / 2);
-		*o_len = 8 + (PBKDF_SALT_SIZE / 2);
+		*out_len = 8 + (PBKDF_SALT_SIZE / 2);
 	}
-	*in_len += *o_len;
+	*in_len += (*out_len + ((*in_len % 8) == 0 ? 8 : 0));
 	return (output);
 }
 
@@ -133,30 +161,4 @@ uint32_t	des_alg(t_des *des, uint32_t block, uint64_t key)
 	while (++i < 32)
 		output |= ((block >> (32 - des->p_table[i])) & 1) << (32 - (i + 1));
 	return (output);
-}
-
-/*
-**	Frees memory used with des-ecb
-*/
-
-int			clean_des_ecb(t_des *des)
-{
-	int		i;
-	int		j;
-
-	free(des->pc1);
-	free(des->pc2);
-	free(des->shifts);
-	free(des->ip_table);
-	free(des->ebit);
-	i = -1;
-	while (++i < 8)
-	{
-		j = -1;
-		while (++j < 4)
-			free(des->s[i][j]);
-	}
-	free(des->p_table);
-	free(des->inverse_table);
-	return (1);
 }

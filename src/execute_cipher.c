@@ -30,7 +30,8 @@ void		execute_cipher(t_ssl *ssl)
 	if (!ssl->f.o)
 		write(1, output, len.out_len);
 	else
-		writetofile(ssl->out_file, output, len.out_len);
+		writetofile(ssl->out_file, (uint8_t *)output, len.out_len);
+	DBI(len.out_len);
 	free(input);
 	free(output);
 	clean_cipher(ssl);

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/24 15:23:47 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/07/11 23:47:44 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,8 +216,8 @@ void				*pop(t_stack *s);
 void				*peeks(t_stack *s);
 int					isemptys(t_stack *s);
 
-size_t				getfilecontents(char *filename, char **contents);
-size_t				writetofile(char *filename, char *contents, size_t len);
+size_t				getfilecontents(char *filename, uint8_t **contents);
+size_t				writetofile(char *filename, uint8_t *contents, size_t len);
 void				printbits_little_endian(void *array, size_t size);
 void				printbits_big_endian(void *array, size_t size);
 

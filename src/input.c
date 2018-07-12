@@ -51,7 +51,7 @@ char		*input_from_stdin(t_ssl *ssl)
 
 char		*input_from_file(t_ssl *ssl)
 {
-	char	*input;
+	uint8_t	*input;
 
 	ssl->input_len = getfilecontents(ssl->in_file, &input);
 	if (!input)
@@ -62,7 +62,7 @@ char		*input_from_file(t_ssl *ssl)
 			"no such file or directory");
 		return (NULL);
 	}
-	return (input);
+	return ((char *)input);
 }
 
 /*
