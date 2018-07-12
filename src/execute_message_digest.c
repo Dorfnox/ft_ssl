@@ -75,11 +75,13 @@ void		execute_input_files(t_ssl *ssl)
 
 void		execute_general(t_ssl *ssl, char *input, int display_type)
 {
-	char	*output;
+	char		*output;
+	t_io_len	l;
 
 	if (!input)
 		return ;
-	output = ssl->enc_func(ssl, input, ssl->input_len);
+	l.in_len = ssl->input_len;
+	output = ssl->enc_func(ssl, input, &l);
 	if (display_type == STDIN_OUTPUT)
 		output_stdin(ssl, input, output);
 	else if (display_type == GIVEN_STRING_OUTPUT)

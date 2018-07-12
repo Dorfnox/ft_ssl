@@ -76,4 +76,3 @@ void			init_settings(t_ssl *ssl, char *sn, char *ln, char *valid_flags)
 	ssl->cmd_name_upper = command_uppercase;
 	ssl->cmd_valid_flags = command_valid_flags;
 }
-

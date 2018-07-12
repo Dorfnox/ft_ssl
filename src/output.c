@@ -14,6 +14,7 @@
 
 /*
 **	Handles displaying the output to the terminal
+**	Mostly for the Message Digest commands
 */
 
 void	output_stdin(t_ssl *ssl, char *input, char *output)
@@ -52,17 +53,4 @@ void	output_filename(t_ssl *ssl, char *input, char *output)
 	else
 		ft_pflite("%s (%s) = %s", ssl->cmd_name_upper, ssl->in_file, output);
 	write(1, "\n", 1);
-}
-
-void	output_to_file_or_stdout(t_ssl *ssl, char *input, char *output)
-{
-	(void)input;
-	if (!ssl->f.o)
-	{
-		write(1, output, ft_strlen(output));
-	}
-	else
-	{
-		writetofile(ssl->out_file, output);
-	}
 }

@@ -40,6 +40,12 @@ typedef struct			s_flags
 	unsigned int		k:1;
 }						t_f;
 
+typedef struct			s_input_output_len
+{
+	size_t				in_len;
+	size_t				out_len;
+}						t_io_len;
+
 typedef struct			s_ft_ssl
 {
 	char				*cmd_name_lower;
@@ -48,7 +54,7 @@ typedef struct			s_ft_ssl
 	char				*user_password;
 	char				*user_salt;
 	char				*user_key;
-	char				*iv;
+	char				*user_iv;
 	struct s_flags		f;
 	t_queue				*flag_queue;
 	char				*flag_error;
@@ -60,7 +66,7 @@ typedef struct			s_ft_ssl
 	size_t				input_len;
 	void				(*execute_func)(struct s_ft_ssl *);
 	unsigned int		(*handle_flags)(struct s_ft_ssl *, char **);
-	char				*(*enc_func)(struct s_ft_ssl *, char *, size_t);
+	char				*(*enc_func)(struct s_ft_ssl *, char *, t_io_len *);
 }						t_ssl;
 
 typedef union			u_32u
@@ -91,7 +97,7 @@ typedef struct			s_pbkdf
 	uint64_t			salt;
 	size_t				salt_len;
 	size_t				num_of_iterations;
-	char				*(*algo)(t_ssl *, char *, size_t);
+	char				*(*algo)(t_ssl *, char *, t_io_len *);
 }						t_pbkdf;
 
 /*
@@ -151,9 +157,9 @@ typedef struct			s_sha256
 
 typedef struct			s_base64
 {
-	int					i;
-	int					j;
-	int					k;
+	size_t				i;
+	size_t				j;
+	size_t				k;
 	int					res_a;
 	int					res_b;
 	int					res_c;

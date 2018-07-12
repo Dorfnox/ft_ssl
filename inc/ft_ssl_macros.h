@@ -85,6 +85,12 @@
 # define FLAG_ERR4(a) ft_str256(3, FE_4A, (a), FE_4B)
 
 /*
+** Malloc Errors
+*/
+
+# define MAL_ERR(a, b) (!(a)) ? malloc_error((b)) : 0;
+
+/*
 **	Key Errors
 */
 

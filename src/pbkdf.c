@@ -18,32 +18,34 @@
 **	Actual openssl uses an MD5 hash with a pass of 1 Iteration!!!
 **	Then it cuts the first 16 characters to be the key,
 **	and the second 16 characters to be the iv.
-**	That behaviour is mimicked here. 
+**	That behaviour is mimicked here.
 */
 
 void	pbkdf2(t_pbkdf *p)
 {
-	char	*output;
-	size_t	i;
-	char	*input;
-	int		input_len;
+	char		*output;
+	size_t		i;
+	char		*input;
+	t_io_len	len;
 
-	input_len = p->pass_len + p->salt_len;
-	!(input = ft_strnew(input_len)) ? malloc_error("pbkdf2 input") : 0;
+	len.in_len = p->pass_len + p->salt_len;
+	MAL_ERR((input = ft_strnew(len.in_len)), "pbkdf2 input");
 	ft_memcpy(input, p->password, p->pass_len);
 	ft_memcpy(&input[p->pass_len], &p->salt, p->salt_len);
 	i = -1;
 	while (++i < p->num_of_iterations)
 	{
-		output = p->algo(NULL, input, input_len);
-		input_len = ft_strlen(output);
+		output = p->algo(NULL, input, &len);
 		free(input);
 		input = output;
+		len.in_len = len.out_len;
 	}
-	p->key = ft_strndup(output, input_len / 2);
-	p->iv = ft_strndup(&output[input_len / 2], input_len / 2);
-	(!p->key || !p->iv) ? malloc_error("Failed to duplicate the key or iv") : 0;
+	p->key = ft_strndup(output, len.in_len / 2);
+	p->iv = ft_strndup(&output[len.in_len / 2], len.in_len / 2);
+	MAL_ERR(p->key && p->iv, "Failed to duplicate the key or iv");
 	ft_strtoupper(&p->key);
 	ft_strtoupper(&p->iv);
+	// DB(p->key);
+	// DB(p->iv);
 	free(output);
 }

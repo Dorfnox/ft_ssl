@@ -28,7 +28,7 @@ unsigned int	key_flag(t_ssl *ssl, char ***av)
 	return ((ssl->f.k = 1));
 }
 
-char		*get_key_from_user(char *given_key)
+char			*get_key_from_user(char *given_key)
 {
 	char	*key;
 	int		i;
@@ -53,7 +53,7 @@ char		*get_key_from_user(char *given_key)
 	return (key);
 }
 
-int			key_is_valid(char *key)
+int				key_is_valid(char *key)
 {
 	char	*hex;
 	int		i;

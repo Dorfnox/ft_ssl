@@ -16,7 +16,7 @@
 **	The main loop for handling md5
 */
 
-char			*execute_md5(t_ssl *ssl, char *input, size_t input_len)
+char			*execute_md5(t_ssl *ssl, char *input, t_io_len *l)
 {
 	t_md5		md5;
 	size_t		i;
@@ -24,9 +24,9 @@ char			*execute_md5(t_ssl *ssl, char *input, size_t input_len)
 
 	(void)ssl;
 	init_md5(&md5);
-	append_bits_md5(&md5, input, &input_len);
+	append_bits_md5(&md5, input, l);
 	i = 0;
-	while (i < ((input_len * 8) / 512))
+	while (i < ((l->in_len * 8) / 512))
 	{
 		ft_memcpy(md5.m, &md5.data[i++ * 64], 64);
 		md5.a2 = md5.a;
@@ -86,23 +86,25 @@ void			execute_md5_(t_md5 *md5, int j)
 **	4) if length is 24, it appends:
 **	0001100000000000000000000000000000000000000000000000000000000000
 **	as the last 64 bits.
+**	Also sets that last out_len as 16 bytes.
 */
 
-void			append_bits_md5(t_md5 *md5, char *input, size_t *len)
+void			append_bits_md5(t_md5 *md5, char *input, t_io_len *l)
 {
 	size_t		num_of_bytes;
 	uint64_t	original_len_in_bits;
 
-	original_len_in_bits = (*len) * 8;
+	original_len_in_bits = (l->in_len) * 8;
 	num_of_bytes = original_len_in_bits + 1;
 	while (num_of_bytes % 512 != 448)
 		++num_of_bytes;
 	num_of_bytes /= 8;
 	md5->data = ft_memalloc(num_of_bytes + 64);
-	ft_memcpy(md5->data, input, (*len));
-	md5->data[(*len)] = 0b10000000;
+	ft_memcpy(md5->data, input, l->in_len);
+	md5->data[l->in_len] = 0b10000000;
 	ft_memcpy(md5->data + num_of_bytes, &original_len_in_bits, 8);
-	(*len) = num_of_bytes + 8;
+	l->in_len = num_of_bytes + 8;
+	l->out_len = 32;
 }
 
 char			*build_md5_output(t_md5 *md5)

@@ -14,51 +14,56 @@
 
 /*
 **	Main execution loop for des-ecb encryption (electronic cookbook)
-**	REQUIRES a '\0' char string as input;
 */
 
-char		*execute_des_ecb(t_ssl *ssl, char *input, size_t input_len)
+char		*execute_des_ecb(t_ssl *ssl, char *input, t_io_len *l)
 {
 	t_des		des;
 	uint64_t	message;
 	uint64_t	encryption;
 	char		*output;
-	size_t		len;
 
 	init_des(&des);
 	init_des_key(ssl, &des);
 	init_des_subkeys(&des, ssl->f.d);
-	output = create_des_output(ssl, input_len);
-	len = 0;
-	while (len < input_len)
+	output = create_des_output(ssl, &l->in_len, &l->out_len);
+	while (l->out_len < l->in_len)
 	{
 		message = str_to_64bit(NULL, &input);
-		message = 0x0123456789abcdef; // REMOVE - this is for testing
-		DB("Message");
-		printbits_little_endian(&message, 8);
+		// message = 0x0123456789abcdef; // REMOVE - this is for testing
+		// DB("Message");
+		// printbits_little_endian(&message, 8);
 		encryption = process_des_ecb(&des, message);
-		DB("Encrypted Message");
-		printbits_little_endian(&encryption, 8);
-		ft_printf("%X\n", encryption);
-		ft_memcpy(&output[len + PBKDF_SALT_SIZE], &encryption, 8);
-		len += 8;
+		// DB("Encrypted Message");
+		// printbits_little_endian(&encryption, 8);
+		insert_64bit_into_string(&output[l->out_len], encryption); // OPPOSITE
+		// ft_memcpy(&output[l->out_len], &encryption, 8); // OPPOSITE
+		l->out_len += 8;
 	}
+	DBI(l->out_len);
+	// printbits_little_endian(output, 8);
 	clean_des_ecb(&des);
 	return (output);
 }
 
-char		*create_des_output(t_ssl *ssl, size_t input_len)
+char		*create_des_output(t_ssl *ssl, size_t *in_len, size_t *o_len)
 {
 	char		*output;
 	int			len;
 	uint64_t	salt;
 
-	len = PBKDF_SALT_SIZE + input_len;
+	len = 8 + (PBKDF_SALT_SIZE / 2) + (*in_len);
 	len += ((len % 8) ? 0 : (8 - (len % 8)));
 	!(output = ft_strnew(len)) ? malloc_error("Creating des output") : 0;
-	salt = hex_str_to_64bit_le(ssl->user_salt);
-	ft_memcpy(output, "Salted__", 8);
-	ft_memcpy(&output[8], &salt, 8);
+	*o_len = 0;
+	if (ssl->user_password)
+	{
+		salt = hex_str_to_64bit_le(ssl->user_salt);
+		ft_memcpy(output, "Salted__", 8);
+		ft_memcpy(&output[8], &salt, PBKDF_SALT_SIZE / 2);
+		*o_len = 8 + (PBKDF_SALT_SIZE / 2);
+	}
+	*in_len += *o_len;
 	return (output);
 }
 
@@ -129,6 +134,10 @@ uint32_t	des_alg(t_des *des, uint32_t block, uint64_t key)
 		output |= ((block >> (32 - des->p_table[i])) & 1) << (32 - (i + 1));
 	return (output);
 }
+
+/*
+**	Frees memory used with des-ecb
+*/
 
 int			clean_des_ecb(t_des *des)
 {

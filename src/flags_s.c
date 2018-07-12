@@ -28,7 +28,7 @@ unsigned int	salt_flag(t_ssl *ssl, char ***av)
 	return (!ssl->user_salt ? 0 : (ssl->f.s = 1));
 }
 
-char		*get_salt_from_user(char *given_salt)
+char			*get_salt_from_user(char *given_salt)
 {
 	char	*salt;
 	int		i;
@@ -53,7 +53,7 @@ char		*get_salt_from_user(char *given_salt)
 	return (salt);
 }
 
-int			salt_is_valid(char *salt)
+int				salt_is_valid(char *salt)
 {
 	char	*hex;
 	int		i;

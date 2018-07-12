@@ -102,7 +102,6 @@ char					*input_from_given_string(t_ssl *ssl);
 void					output_stdin(t_ssl *ssl, char *input, char *outputt);
 void					output_given_string(t_ssl *ssl, char *in, char *out);
 void					output_filename(t_ssl *ssl, char *input, char *outp);
-void					output_to_file_or_stdout(t_ssl *s, char *i, char *o);
 
 /*
 **	Endian handling
@@ -132,6 +131,7 @@ void					execute_input_files(t_ssl *ssl);
 void					execute_general(t_ssl *ssl, char *input, int type);
 
 void					execute_cipher(t_ssl *ssl);
+void					clean_cipher(t_ssl *ssl);
 
 /*
 **	Message Digest
@@ -146,8 +146,8 @@ void					init_md5_k_table1(t_md5 *md5);
 void					init_md5_k_table2(t_md5 *md5);
 void					init_md5_k_table3(t_md5 *md5);
 
-char					*execute_md5(t_ssl *ssl, char *input, size_t input_len);
-void					append_bits_md5(t_md5 *m, char *in, size_t *input_len);
+char					*execute_md5(t_ssl *ssl, char *input, t_io_len *l);
+void					append_bits_md5(t_md5 *m, char *in, t_io_len *l);
 void					execute_md5_(t_md5 *md5, int j);
 char					*build_md5_output(t_md5 *md5);
 void					clean_md5(t_md5 *md5);
@@ -161,7 +161,7 @@ void					init_sha256_k_table1(t_sha256 *sha);
 void					init_sha256_k_table2(t_sha256 *sha);
 void					init_sha256_k_table3(t_sha256 *sha);
 
-char					*execute_sha256(t_ssl *ssl, char *input, size_t in_len);
+char					*execute_sha256(t_ssl *ssl, char *input, t_io_len *l);
 void					init_words(t_sha256 *sha, size_t *k);
 void					init_working_variables(t_sha256 *sha);
 void					perform_algorithm(t_sha256 *sha);
@@ -177,7 +177,7 @@ void					clean_sha256(t_sha256 *sha);
 
 void					init_sha224(t_sha256 *sha);
 
-char					*execute_sha224(t_ssl *ssl, char *input, size_t input_len);
+char					*execute_sha224(t_ssl *ssl, char *input, t_io_len *l);
 char					*build_sha224_output(t_sha256 *sha);
 
 /*
@@ -187,10 +187,10 @@ char					*build_sha224_output(t_sha256 *sha);
 **	BASE64
 */
 
-char					*execute_base64(t_ssl *ssl, char *input, size_t in_len);
-char					*base64_encrypt(char *input, size_t in_len);
-char					*base64_decrypt(char *input, size_t in_len);
-int						*get_decrypt_table(char *input, int i_len, int *o_len);
+char					*execute_base64(t_ssl *ssl, char *input, t_io_len *l);
+char					*base64_encrypt(char *input, size_t ilen, size_t *olen);
+char					*base64_decrypt(char *input, size_t ilen, size_t *olen);
+int						*get_decrypt_table(char *in, size_t ilen, size_t *olen);
 
 /*
 **	DES-ECB
@@ -202,8 +202,8 @@ void					init_des_subkeys(t_des *des, uint8_t rev);
 uint64_t				key_string_to_hex(char *hex_string);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
 
-char					*execute_des_ecb(t_ssl *ssl, char *input, size_t in_len);
-char					*create_des_output(t_ssl *ssl, size_t input_len);
+char					*execute_des_ecb(t_ssl *ssl, char *in, t_io_len *l);
+char					*create_des_output(t_ssl *s, size_t *iln, size_t *oln);
 uint64_t				process_des_ecb(t_des *des, uint64_t message);
 uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
 int						clean_des_ecb(t_des *des);

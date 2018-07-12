@@ -36,7 +36,7 @@ unsigned int	password_flag(t_ssl *ssl, char ***av)
 **	mallocs a size to hold both the password and the concatenated salt
 */
 
-char		*get_password_from_user(char *given_pass)
+char			*get_password_from_user(char *given_pass)
 {
 	char	*pass;
 	char	pass_confirm[PBKDF_PASSWORD_SIZE];

@@ -38,14 +38,15 @@ void		init_des(t_des *des)
 /*
 **	If no user key was provided,
 **	creates PBKDF parameters and calls pbkdf using the parameters.
-**	The iv is not used, but is still saved here.
+**	PBKDF will return a key.
+**	The iv is not used in des-ecb, but is still saved for freeing later.
 */
 
 void		init_des_key(t_ssl *ssl, t_des *des)
 {
 	t_pbkdf		p;
 	int			i;
-	char		buff;
+	uint64_t	buff;
 
 	if (!ssl->user_key)
 	{
@@ -57,14 +58,14 @@ void		init_des_key(t_ssl *ssl, t_des *des)
 		p.algo = PBKDF_ALGO;
 		pbkdf2(&p);
 		ssl->user_key = p.key;
-		ssl->iv = p.iv;
+		ssl->user_iv = p.iv;
 	}
 	i = -1;
 	des->key = 0;
 	while ((buff = ssl->user_key[++i]))
 	{
-		buff -= buff  > 47 && buff < 58 ? 48 : 0;
-		buff -= buff  > 64 && buff < 71 ? 55 : 0;
+		buff -= buff > 47 && buff < 58 ? 48 : 0;
+		buff -= buff > 64 && buff < 71 ? 55 : 0;
 		des->key |= (buff & 0xF) << (60 - (i * 4));
 	}
 }
@@ -77,7 +78,7 @@ void		init_des_key(t_ssl *ssl, t_des *des)
 void		init_des_subkeys(t_des *des, uint8_t reverse)
 {
 	int			i;
-	char		buff;
+	uint64_t	buff;
 
 	des->key_pc1 = permutated_choice(des->key, des->pc1, 56);
 	des->l[0] = LEFT_ROT_28(des->key_pc1 >> 28, des->shifts[0]);
