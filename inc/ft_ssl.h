@@ -61,11 +61,15 @@ char					*get_key_from_user(char *given_key);
 int						key_is_valid(char *key);
 
 unsigned int			password_flag(t_ssl *ssl, char ***av);
-char					*get_password_from_user(char *given_password);
+char					*get_password_from_user(t_ssl *ssl, char *given_pass);
 
 unsigned int			salt_flag(t_ssl *ssl, char ***av);
 char					*get_salt_from_user(char *given_salt);
 int						salt_is_valid(char *salt);
+
+unsigned int			vector_flag(t_ssl *ssl, char ***av);
+char					*get_vector_from_user(char *given_vector);
+int						vector_is_valid(char *vector);
 
 unsigned int			base64_flag(t_ssl *ssl, char ***av);
 

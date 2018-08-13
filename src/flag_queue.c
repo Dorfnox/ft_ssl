@@ -84,6 +84,10 @@ void			*search_flag_queue(t_node *n, char *flag)
 	return (NULL);
 }
 
+/*
+**	General cleanup of the flag queue
+*/
+
 void			clean_flag_queue(t_queue **q)
 {
 	while (!isemptyq(*q))

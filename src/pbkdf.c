@@ -45,7 +45,5 @@ void	pbkdf2(t_pbkdf *p)
 	MAL_ERR(p->key && p->iv, "Failed to duplicate the key or iv");
 	ft_strtoupper(&p->key);
 	ft_strtoupper(&p->iv);
-	// DB(p->key);
-	// DB(p->iv);
 	free(output);
 }

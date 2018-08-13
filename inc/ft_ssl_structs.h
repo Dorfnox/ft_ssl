@@ -38,6 +38,7 @@ typedef struct			s_flags
 	unsigned int		o:1;
 	unsigned int		a:1;
 	unsigned int		k:1;
+	unsigned int		v:1;
 }						t_f;
 
 typedef struct			s_input_output_len

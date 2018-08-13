@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/20 16:53:16 by bpierce          ###   ########.fr        #
+#    Updated: 2018/08/12 18:32:02 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ FILES = main \
 		flags_k \
 		flags_p \
 		flags_s \
+		flags_v \
 		flags_base64 \
 		input \
 		output \
@@ -35,6 +36,7 @@ FILES = main \
 			des_flags des_init des_execute
 
 C_FLAGS = -Wall -Wextra -Werror
+DEBUG = -g -fsanitize=address
 
 C_LOC = src/
 C_NAM = $(addsuffix .c, $(FILES))
@@ -70,7 +72,7 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc $(C_FLAGS) $^ -o $@
+	@gcc $(C_FLAGS) $(DEBUG) $^ -o $@
 	@echo
 	@echo "$(GREEN_LIGHT)     xxXXXXXXXXxx     $(END_COLOUR)"
 	@echo "$(GREEN_LIGHT)  xXX------------XXx  $(END_COLOUR)"

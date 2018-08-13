@@ -118,6 +118,14 @@
 # define SALT_ERROR SALT_ERR1 SALT_ERR2
 
 /*
+**	Initialization Vector Errors
+*/
+
+# define VECTOR_ERR1 "[32mA vector is required ( 16 HEX chars).[0m\n"
+# define VECTOR_ERR2 "Enter a [92mnew vector[0m: "
+# define VECTOR_ERROR VECTOR_ERR1 VECTOR_ERR2
+
+/*
 **	Auxiliary functions / declarations
 **	----------------------------------------------------------------------------
 */
@@ -135,6 +143,7 @@
 # define PBKDF_PS PBKDF_PASSWORD_SIZE
 # define PBKDF_ITERATIONS 1
 # define PBKDF_KEY_LEN 16
+# define PBKDF_VECTOR_SIZE 16
 
 /*
 **	Super Helpful Functions

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 13:16:59 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/07 23:32:19 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/08/12 18:56:41 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ uint64_t	hex_str_to_64bit_le(char *s)
 ** Given 64-bit data, write that into the area where s is pointing to
 */
 
-void	insert_64bit_into_string(char *s, uint64_t b)
+void		insert_64bit_into_string(char *s, uint64_t b)
 {
 	int		i;
 

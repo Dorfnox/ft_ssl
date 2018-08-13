@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 20:15:18 by bpierce           #+#    #+#             */
-/*   Updated: 2018/07/11 23:49:46 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/08/12 18:55:15 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t			getfilecontents(char *filename, uint8_t **contents)
 	int		ret;
 	size_t	total;
 
-	if (!filename || !contents)
+	if (!filename || !contents || (*contents = NULL))
 		return (0);
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		return (free_contents(fd, contents));
@@ -61,5 +61,5 @@ size_t			writetofile(char *filename, uint8_t *contents, size_t len)
 		return (0);
 	ret = write(fd, contents, len);
 	close(fd);
-	return (ret == -1 ? 0 : len);
+	return (ret == -1 ? 0 : (size_t)ret);
 }

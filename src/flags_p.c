@@ -28,7 +28,7 @@ unsigned int	password_flag(t_ssl *ssl, char ***av)
 		ssl->flag_error = ft_str256(2, FLAG_ERR1("-p"), PASSWORD_ERR1);
 		return (0);
 	}
-	ssl->user_password = get_password_from_user(**av);
+	ssl->user_password = get_password_from_user(ssl, **av);
 	return (!ssl->user_password ? 0 : (ssl->f.p = 1));
 }
 
@@ -36,7 +36,7 @@ unsigned int	password_flag(t_ssl *ssl, char ***av)
 **	mallocs a size to hold both the password and the concatenated salt
 */
 
-char			*get_password_from_user(char *given_pass)
+char			*get_password_from_user(t_ssl *ssl, char *given_pass)
 {
 	char	*pass;
 	char	pass_confirm[PBKDF_PASSWORD_SIZE];
@@ -58,6 +58,7 @@ char			*get_password_from_user(char *given_pass)
 		pass_confirm, PBKDF_PS + 1, RPP_FORCEUPPER) : 0;
 	if (k == 1 && !(ft_strequ(pass_confirm, pass)))
 		ft_strdel(&pass);
-	!pass ? write(1, "PASSWORD VERIFICATION FAILED\n", 29) : 0;
+	if (!pass)
+		ssl->flag_error = ft_str256(1, "PASSWORD VERIFICATION FAILED\n");
 	return (pass);
 }
