@@ -42,7 +42,7 @@ void		init_des(t_des *des)
 **	The iv is not used in des-ecb, but is still saved for freeing later.
 */
 
-void		init_des_key(t_ssl *ssl, t_des *des)
+void		init_des_key(t_ssl *ssl, t_des *des, char **input, t_io_len *l)
 {
 	t_pbkdf		p;
 	int			i;
@@ -52,7 +52,7 @@ void		init_des_key(t_ssl *ssl, t_des *des)
 	{
 		p.password = ssl->user_password;
 		p.pass_len = ft_strlen(ssl->user_password);
-		p.salt = hex_str_to_64bit_le(ssl->user_salt);
+		p.salt = acquire_salt(ssl, input, l);
 		p.salt_len = PBKDF_SALT_SIZE / 2;
 		p.num_of_iterations = PBKDF_ITERATIONS;
 		p.algo = PBKDF_ALGO;
@@ -95,7 +95,9 @@ void		init_des_subkeys(t_des *des, uint8_t reverse)
 		des->subkey[i] = permutated_choice(buff, des->pc2, 48);
 	}
 	if (reverse)
+	{
 		ft_varrayrev((void **)(&des->subkey), 16);
+	}
 }
 
 /*
@@ -122,7 +124,7 @@ uint64_t	permutated_choice(uint64_t key, int *pc, int size)
 **	Frees memory used with des-ecb
 */
 
-int			clean_des_ecb(t_des *des)
+int			clean_des(t_des *des)
 {
 	int		i;
 	int		j;

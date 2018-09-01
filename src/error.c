@@ -33,3 +33,9 @@ void	malloc_error(char *message)
 	message ? ft_pflite("ft_ssl: Malloc Eror: %s\n", message) : 0;
 	exit(1);
 }
+
+void	error_out(char *message)
+{
+	message ? ft_pflite(message) : 0;
+	exit(1);
+}

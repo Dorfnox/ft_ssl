@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   des_execute.c                                      :+:      :+:    :+:   */
+/*   des_ecb_execute2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/23 13:35:52 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/23 13:35:57 by bpierce          ###   ########.fr       */
+/*   Created: 2018/08/31 00:16:01 by bpierce           #+#    #+#             */
+/*   Updated: 2018/08/31 00:16:09 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-/*
-**	Main execution loop for des-ecb encryption (electronic cookbook)
-*/
-
-char		*execute_des_ecb(t_ssl *ssl, char *input, t_io_len *l)
-{
-	t_des		des;
-	uint64_t	message;
-	uint64_t	encryption;
-	char		*output;
-
-	init_des(&des);
-	init_des_key(ssl, &des);
-	init_des_subkeys(&des, ssl->f.d);
-	output = create_des_output(ssl, &l->in_len, &l->out_len);
-	while (l->out_len < l->in_len)
-	{
-		message = des_ecb_str_to_64bit(&input);
-		printbits_little_endian(&message, 8);
-		encryption = process_des_ecb(&des, message);
-		insert_64bit_into_string(&output[l->out_len], encryption);
-		l->out_len += 8;
-	}
-	clean_des_ecb(&des);
-	return (output);
-}
 
 /*
 **	Turns the character string into a uint64_t message.
@@ -45,18 +18,22 @@ char		*execute_des_ecb(t_ssl *ssl, char *input, t_io_len *l)
 **	required in order to fill the last byte needed are appended to message.
 */
 
-uint64_t	des_ecb_str_to_64bit(char **input)
+uint64_t	des_ecb_str_to_64bit(char **input, size_t *in_len)
 {
-	uint8_t			i;
+	uint8_t		i;
 	uint64_t	message;
 	uint64_t	remaining;
+	uint8_t		shift_amount;
 
 	i = -1;
 	message = 0;
-	while (++i < 8 && **input)
+	while (++i < 8 && *in_len)
 	{
-		message |= ((uint64_t)(**input) << (56 - (i * 8)));
+		shift_amount = 56 - (i * 8);
+		message |= ((((uint64_t)(**input)) << shift_amount) &
+			(0xFFUL << shift_amount));
 		++(*input);
+		--(*in_len);
 	}
 	remaining = 8 - i;
 	while (i < 8)
@@ -68,31 +45,26 @@ uint64_t	des_ecb_str_to_64bit(char **input)
 }
 
 /*
-**	Allocates enough space for the:
-**	- Salted__ (8 bytes)
-**	- salt (usually 8 bytes)
-**	- input len
-**	- An extra 8 bytes in case the input length is a modulus of 8
+**	A special decrypt method, silimar to above, that flips all the bits
+**	Input will for sure be in chunks of 8 bytes
 */
 
-char		*create_des_output(t_ssl *ssl, size_t *in_len, size_t *out_len)
+uint64_t	des_ecb_str_to_64bit_dec(char **input, size_t *len)
 {
-	char		*output;
-	int			len;
-	uint64_t	salt;
+	uint64_t	message;
 
-	len = 8 + (PBKDF_SALT_SIZE / 2) + (*in_len) + 8;
-	MAL_ERR((output = ft_strnew(len)), "Creating des output");
-	*out_len = 0;
-	if (ssl->user_password)
-	{
-		salt = hex_str_to_64bit_le(ssl->user_salt);
-		ft_memcpy(output, "Salted__", 8);
-		ft_memcpy(&output[8], &salt, PBKDF_SALT_SIZE / 2);
-		*out_len = 8 + (PBKDF_SALT_SIZE / 2);
-	}
-	*in_len += (*out_len + ((*in_len % 8) == 0 ? 8 : 0));
-	return (output);
+	if (*len % 8)
+		error_out("Improper input size");
+	ft_memcpy(&message, *input, 8);
+	message = (message & 0x00000000FFFFFFFF) << 32 |
+				(message & 0xFFFFFFFF00000000) >> 32;
+	message = (message & 0x0000FFFF0000FFFF) << 16 |
+				(message & 0xFFFF0000FFFF0000) >> 16;
+	message = (message & 0x00FF00FF00FF00FF) << 8 |
+				(message & 0xFF00FF00FF00FF00) >> 8;
+	*input += 8;
+	*len -= 8;
+	return (message);
 }
 
 /*

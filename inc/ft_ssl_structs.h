@@ -161,11 +161,11 @@ typedef struct			s_base64
 	size_t				i;
 	size_t				j;
 	size_t				k;
-	int					res_a;
-	int					res_b;
-	int					res_c;
-	int					res_d;
-	int					res_e;
+	uint64_t			res_a;
+	uint64_t			res_b;
+	uint64_t			res_c;
+	uint64_t			res_d;
+	uint64_t			res_e;
 	int					input_len;
 	int					output_len;
 }						t_base64;

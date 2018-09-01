@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 10:46:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/07/11 23:47:44 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/08/30 18:45:40 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,9 @@ char				*random_hex_string(size_t size);
 uint64_t			str_to_64bit(char *s, char **s2);
 
 uint64_t			hex_str_to_64bit_be(char *s);
+char				*bit64_to_hex_str_be(uint64_t x);
 uint64_t			hex_str_to_64bit_le(char *s);
+char				*bit64_to_hex_str_le(uint64_t x);
 void				insert_64bit_into_string(char *s, uint64_t b);
 
 #endif

@@ -50,8 +50,14 @@ unsigned int	handle_command_2(t_ssl *ssl, char **av)
 	else if (SE_("des-ecb", *av) && (ssl->execute_func = execute_cipher))
 	{
 		init_settings(ssl, "des-ecb", "DES-ECB", VALID_DES_FLAGS);
-		ssl->handle_flags = handle_des_flags;
+		ssl->handle_flags = handle_des_ecb_flags;
 		ssl->enc_func = execute_des_ecb;
+	}
+	else if (SE_("des-cbc", *av) && (ssl->execute_func = execute_cipher))
+	{
+		init_settings(ssl, "des-cbc", "DES-CBC", VALID_DES_FLAGS);
+		ssl->handle_flags = handle_des_cbc_flags;
+		ssl->enc_func = execute_des_cbc;
 	}
 	else
 		ssl->flag_error = FLAG_ERR0(*av);

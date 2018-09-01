@@ -25,6 +25,7 @@
 
 int						ssl_error(char *name, char *message, int ret_value);
 void					malloc_error(char *message);
+void					error_out(char *message);
 void					clean_up(t_ssl *ssl);
 
 /*
@@ -86,8 +87,11 @@ unsigned int			consolidate_sha256_flags(t_ssl *ssl);
 unsigned int			handle_base64_flags(t_ssl *ssl, char **av);
 unsigned int			consolidate_base64_flags(t_ssl *ssl);
 
-unsigned int			handle_des_flags(t_ssl *ssl, char **av);
-unsigned int			consolidate_des_flags(t_ssl *ssl);
+unsigned int			handle_des_ecb_flags(t_ssl *ssl, char **av);
+unsigned int			consolidate_des_ecb_flags(t_ssl *ssl);
+
+unsigned int			handle_des_cbc_flags(t_ssl *ssl, char **av);
+unsigned int			consolidate_des_cbc_flags(t_ssl *ssl);
 
 /*
 **	Input handling
@@ -121,6 +125,7 @@ uint64_t				swap_endian64(uint64_t a);
 */
 
 void					pbkdf2(t_pbkdf *p);
+uint64_t				acquire_salt(t_ssl *ssl, char **input, t_io_len *l);
 
 /*
 **	Crypto execution
@@ -135,6 +140,7 @@ void					execute_input_files(t_ssl *ssl);
 void					execute_general(t_ssl *ssl, char *input, int type);
 
 void					execute_cipher(t_ssl *ssl);
+void					write_cipher(t_ssl *ssl, char *i, char *o, t_io_len *l);
 void					clean_cipher(t_ssl *ssl);
 
 /*
@@ -201,15 +207,24 @@ int						*get_decrypt_table(char *in, size_t ilen, size_t *olen);
 */
 
 void					init_des(t_des *des);
-void					init_des_key(t_ssl *ssl, t_des *des);
+void					init_des_key(t_ssl *s, t_des *d, char **i, t_io_len *l);
 void					init_des_subkeys(t_des *des, uint8_t rev);
 uint64_t				permutated_choice(uint64_t key, int *pc, int size);
-int						clean_des_ecb(t_des *des);
+int						clean_des(t_des *des);
 
 char					*execute_des_ecb(t_ssl *ssl, char *in, t_io_len *l);
-uint64_t				des_ecb_str_to_64bit(char **input);
-char					*create_des_output(t_ssl *s, size_t *iln, size_t *oln);
+uint64_t				des_ecb_str_to_64bit(char **input, size_t *in_len);
 uint64_t				process_des_ecb(t_des *des, uint64_t message);
 uint32_t				des_alg(t_des *des, uint32_t b, uint64_t key);
+
+char					*des_ecb_enc(t_ssl *s, t_des *d, char *i, t_io_len *l);
+char					*des_enc_out(t_ssl *ssl, size_t *in_len);
+char					*des_ecb_dec(t_ssl *s, t_des *d, char *i, t_io_len *l);
+char					*des_dec_out(t_ssl *s, char **in, size_t *in_len);
+uint64_t				des_ecb_str_to_64bit_dec(char **input, size_t *in_len);
+
+char					*execute_des_cbc(t_ssl *ssl, char *in, t_io_len *l);
+char					*des_cbc_enc(t_ssl *s, t_des *d, char *i, t_io_len *l);
+char					*des_cbc_dec(t_ssl *s, t_des *d, char *i, t_io_len *l);
 
 #endif

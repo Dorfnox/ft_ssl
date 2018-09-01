@@ -16,8 +16,6 @@ unsigned int	salt_flag(t_ssl *ssl, char ***av)
 {
 	if (ssl->f.s && (ssl->flag_error = FLAG_ERR4("-s")))
 		return (0);
-	if (ssl->f.k && (ssl->flag_error = FLAG_ERR3("-s", "-k")))
-		return (0);
 	++(*av);
 	if (!**av)
 	{

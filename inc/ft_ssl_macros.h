@@ -55,7 +55,7 @@
 */
 
 # define VALID_BASE64_FLAGS "-d\n-e\n-i\n-o\n"
-# define VALID_DES_FLAGS "-d\n-e\n-i\n-o\n-k\n"
+# define VALID_DES_FLAGS "-d\n-e\n-i\n-o\n-k\n-p\n-s\n-v\n"
 
 /*
 **	Flag Errors
@@ -77,7 +77,7 @@
 # define FLAG_ERR2(a) ft_str256(6, FE_2A, (a), FE_2B, FE_2C, FE_2D, FE_2E)
 
 # define FE_3A "flag '"
-# define FE_3B "' cannot be used with flag'"
+# define FE_3B "' cannot be used with flag '"
 # define FLAG_ERR3(a, b) ft_str256(5, FE_3A, (a), FE_3B, (b), "'\n")
 
 # define FE_4A "consolidate: flag '"

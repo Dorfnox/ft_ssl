@@ -36,9 +36,9 @@ char		*base64_encrypt(char *input, size_t in_len, size_t *o_len)
 	b.j = -1;
 	while (b.i < in_len && (b.k = -1))
 	{
-		b.res_a = b.i < in_len ? (int)input[b.i++] : 0;
-		b.res_b = b.i < in_len ? (int)input[b.i++] : 0;
-		b.res_c = b.i < in_len ? (int)input[b.i++] : 0;
+		b.res_a = b.i < in_len ? (uint8_t)input[b.i++] : 0;
+		b.res_b = b.i < in_len ? (uint8_t)input[b.i++] : 0;
+		b.res_c = b.i < in_len ? (uint8_t)input[b.i++] : 0;
 		b.res_d = (b.res_a << 16) | (b.res_b << 8) | b.res_c;
 		while (++b.k < 4)
 			output[++b.j] = t[(b.res_d >> (18 - (6 * b.k))) & 0x3F];

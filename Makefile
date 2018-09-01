@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/08/12 18:32:02 by bpierce          ###   ########.fr        #
+#    Updated: 2018/08/31 17:30:51 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ FILES = main \
 			sha224_execute \
 		execute_cipher \
 			base64_flags base64_execute \
-			des_flags des_init des_execute
+			des_flags des_init des_ecb_execute des_ecb_execute2 \
+			des_cbc_execute
 
 C_FLAGS = -Wall -Wextra -Werror
 DEBUG = -g -fsanitize=address
@@ -72,7 +73,8 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc $(C_FLAGS) $(DEBUG) $^ -o $@
+	@# @gcc $(C_FLAGS) $(DEBUG) $^ -o $@
+	@gcc $(C_FLAGS) $^ -o $@
 	@echo
 	@echo "$(GREEN_LIGHT)     xxXXXXXXXXxx     $(END_COLOUR)"
 	@echo "$(GREEN_LIGHT)  xXX------------XXx  $(END_COLOUR)"

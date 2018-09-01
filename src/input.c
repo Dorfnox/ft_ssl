@@ -20,27 +20,26 @@
 char		*input_from_stdin(t_ssl *ssl)
 {
 	char	*input;
-	char	*buffer[256];
-	int		i;
+	char	*new_input;
+	char	buffer[1024];
+	int		ret;
 
 	input = ft_strnew(0);
 	ssl->input_len = 0;
-	while ((i = read(0, buffer, 255)))
+	while ((ret = read(0, buffer, 1023)))
 	{
-		if (i == -1)
+		if (ret == -1)
 		{
 			ssl_error("read error", "failed to read from stdin", 1);
 			free(input);
 			return (NULL);
 		}
-		buffer[i] = 0;
-		if (!(input = ft_strfjoin(&input, (char *)buffer)))
-		{
-			ssl_error("ft_strfjoin error", "input_from_stdin fail", 1);
-			free(input);
-			return (NULL);
-		}
-		ssl->input_len += i;
+		ssl->input_len += ret;
+		MAL_ERR((new_input = ft_strnew(ssl->input_len)), "Gathering input");
+		ft_memcpy(new_input, input, ssl->input_len - ret);
+		ft_memcpy(&new_input[ssl->input_len - ret], buffer, ret);
+		free(input);
+		input = new_input;
 	}
 	return (input);
 }

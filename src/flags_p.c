@@ -20,8 +20,6 @@ unsigned int	password_flag(t_ssl *ssl, char ***av)
 {
 	if (ssl->f.p && (ssl->flag_error = FLAG_ERR4("-p")))
 		return (0);
-	if (ssl->f.k && (ssl->flag_error = FLAG_ERR3("-p", "-k")))
-		return (0);
 	++(*av);
 	if (!**av)
 	{

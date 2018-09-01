@@ -12,6 +12,12 @@
 
 #include "ft_ssl.h"
 
+/*
+**	The main simply handles:
+**	-	Command Line parsing
+**	-	Execution of the cipher / message digest algorithm (ssl.execute_func)
+*/
+
 int		main(int ac, char **av)
 {
 	t_ssl	ssl;
