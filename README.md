@@ -7,7 +7,7 @@ A collection of encryption algorithms written in C
 
 - MD5
 - SHA-256
-- SHA
+- SHA-224
 
 ### Encryption
 
